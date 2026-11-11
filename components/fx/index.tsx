@@ -12,7 +12,9 @@ export function SplitText({ text, className, delay = 0, as = "span", inView = tr
   const words = text.split(" ");
   let i = 0;
   return (
+    // key={text}: al cambiar de idioma se reconstruye el título entero y vuelve a animarse limpio
     <Tag
+      key={text}
       className={className}
       aria-label={text}
       initial="hidden"

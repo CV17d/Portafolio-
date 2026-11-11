@@ -276,7 +276,7 @@ export default function Library() {
                 <div className="text-center">
                   <p className="font-display text-3xl font-semibold sm:text-5xl">
                     {t.loaderTitle.split("").map((ch, i) => (
-                      <motion.span key={i} className="inline-block" initial={{ y: 30, opacity: 0, rotateX: -90 }} animate={{ y: 0, opacity: 1, rotateX: 0 }} transition={{ delay: i * 0.04, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}>
+                      <motion.span key={`${t.loaderTitle}-${i}`} className="inline-block" initial={{ y: 30, opacity: 0, rotateX: -90 }} animate={{ y: 0, opacity: 1, rotateX: 0 }} transition={{ delay: i * 0.04, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}>
                         {ch === " " ? " " : ch}
                       </motion.span>
                     ))}
