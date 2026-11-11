@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Award, Check, ChevronLeft, ChevronRight, Globe, X, ZoomIn } from "lucide-react";
 import Section from "./Section";
@@ -113,7 +114,8 @@ export default function Certificates() {
         ))}
       </div>
 
-      {/* Visor */}
+      {/* Visor (en el body para que ningún transform de la sección lo afecte) */}
+      {typeof document !== "undefined" && createPortal(
       <AnimatePresence>
         {cur && (
           <motion.div
@@ -147,7 +149,8 @@ export default function Certificates() {
             </button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body)}
     </Section>
   );
 }
