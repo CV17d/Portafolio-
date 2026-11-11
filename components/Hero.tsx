@@ -77,12 +77,14 @@ export default function Hero() {
                 <Image src={profile.photo} alt={t.photoAlt} width={589} height={1000} priority className="aspect-[4/5] w-full scale-105 object-cover object-[50%_42%] transition duration-700 group-hover:scale-110" />
               </div>
               {badges.map((b) => (
-                <span
-                  key={b.label}
-                  className="absolute hidden whitespace-nowrap rounded-full border border-line bg-card/90 px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur sm:inline-flex sm:items-center sm:gap-1.5"
-                  style={{ left: b.x, top: b.y, transform: "translateZ(60px)", animation: "var(--animate-float)", animationDelay: `${b.d}s` }}
-                >
-                  <Sparkles size={12} className="text-accent" aria-hidden /> {b.label}
+                // fuera: lo adelanta en 3D (delante de la foto); dentro: la animación de flotar
+                <span key={b.label} className="absolute z-20 hidden sm:block" style={{ left: b.x, top: b.y, transform: "translateZ(60px)" }}>
+                  <span
+                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-card/90 px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur"
+                    style={{ animation: "var(--animate-float)", animationDelay: `${b.d}s` }}
+                  >
+                    <Sparkles size={12} className="text-accent" aria-hidden /> {b.label}
+                  </span>
                 </span>
               ))}
             </Tilt>
