@@ -10,6 +10,8 @@ import { bookById, getBooks, type BookId } from "@/lib/chapters";
 import { getLines, parseIntent, type Intent } from "@/lib/intents";
 import { useLang } from "@/lib/i18n";
 import { LangSwitch } from "../LanguagePicker";
+import ThemeSwitch from "../ThemeSwitch";
+import { useTheme } from "@/lib/theme";
 import { readingTime, speak, stopSpeaking } from "@/lib/speech";
 import type { SceneCommand, ScenePhase } from "../library3d/Scene3D";
 
@@ -18,6 +20,7 @@ const Scene3D = dynamic(() => import("../library3d/Scene3D"), { ssr: false });
 export default function Library() {
   const reduce = useReducedMotion() ?? false;
   const { lang, t, c } = useLang();
+  const { theme } = useTheme();
   const { profile } = c;
   const lines = getLines(lang);
   // Refs para los callbacks de la escena 3D (que no se recrean al cambiar de idioma)
@@ -231,6 +234,7 @@ export default function Library() {
               onBookClick={(id) => request(id)}
               onRobotClick={() => say(lines.greet)}
               bookTitles={bookTitles}
+              day={theme === "light"}
               onReady={() => setTimeout(() => setReady(true), 400)}
             />
           </div>
@@ -300,6 +304,7 @@ export default function Library() {
               </div>
             </div>
             <div className="pointer-events-auto flex items-center gap-2">
+              <ThemeSwitch className="border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" />
               <LangSwitch className="border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" />
               <button type="button" onClick={toggleMute} className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" aria-label={muted ? t.muteOn : t.muteOff}>
                 {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}

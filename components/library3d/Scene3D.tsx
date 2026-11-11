@@ -35,6 +35,7 @@ type Props = {
   onRobotClick: () => void;
   onReady: () => void;
   bookTitles: Record<BookId, string>; // nombres de los libros en el idioma elegido
+  day: boolean; // modo claro: sale el sol y la biblioteca se ilumina
 };
 
 // ---------- utilidades ----------
@@ -119,8 +120,132 @@ function useWallpaper() {
   }, []);
 }
 
+// ---------- día / noche ----------
+// k va de 0 (noche) a 1 (día) y lo leen las luces, las ventanas y el fondo.
+type DayRef = MutableRefObject<number>;
+const NIGHT_BG = new THREE.Color("#140e0a");
+const DAY_BG = new THREE.Color("#c9ad86");
+const mix = (a: string, b: string) => {
+  const ca = new THREE.Color(a);
+  const cb = new THREE.Color(b);
+  return (k: number, out: THREE.Color) => out.copy(ca).lerp(cb, k);
+};
+
+function DayCycle({ day, k }: { day: boolean; k: DayRef }) {
+  const { scene } = useThree();
+  useFrame((_, dt) => {
+    k.current = THREE.MathUtils.damp(k.current, day ? 1 : 0, 2.2, dt);
+    const bg = scene.background as THREE.Color | null;
+    if (bg?.isColor) bg.copy(NIGHT_BG).lerp(DAY_BG, k.current);
+    if (scene.fog) (scene.fog as THREE.Fog).color.copy(NIGHT_BG).lerp(DAY_BG, k.current);
+  });
+  return null;
+}
+
+// Rayo de sol: un plano translúcido que va de la ventana al piso.
+function SunBeam({ from, to, k }: { from: [number, number, number]; to: [number, number, number]; k: DayRef }) {
+  const ref = useRef<THREE.Mesh>(null!);
+  const mat = useRef<THREE.MeshBasicMaterial>(null!);
+  const a = new THREE.Vector3(...from);
+  const b = new THREE.Vector3(...to);
+  const len = a.distanceTo(b);
+  useLayoutEffect(() => {
+    const dir = b.clone().sub(a).normalize();
+    ref.current.position.copy(a).add(b).multiplyScalar(0.5);
+    ref.current.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+  });
+  useFrame(({ clock }) => {
+    mat.current.opacity = k.current * (0.07 + Math.sin(clock.elapsedTime * 0.8) * 0.012);
+    ref.current.visible = k.current > 0.02;
+  });
+  return (
+    <mesh ref={ref}>
+      <boxGeometry args={[1.7, len, 0.02]} />
+      <meshBasicMaterial ref={mat} color="#fff1c9" transparent opacity={0} depthWrite={false} blending={THREE.AdditiveBlending} side={THREE.DoubleSide} toneMapped={false} />
+    </mesh>
+  );
+}
+
+// Ventana: cielo nocturno con luna o cielo azul con sol y nubes, según k.
+const skyColor = mix("#1d3557", "#4f9be0");
+const skyEmissive = mix("#5f8fd6", "#3d8fdc");
+const orbColor = mix("#fff6d8", "#fff3b0");
+function SkyWindow({ x, k }: { x: number; k: DayRef }) {
+  const glass = useRef<THREE.MeshStandardMaterial>(null!);
+  const orb = useRef<THREE.Mesh>(null!);
+  const orbMat = useRef<THREE.MeshBasicMaterial>(null!);
+  const halo = useRef<THREE.MeshBasicMaterial>(null!);
+  const clouds = useRef<THREE.Group>(null!);
+  const cloudMats = useRef<THREE.MeshBasicMaterial[]>([]);
+  useFrame(({ clock }) => {
+    const v = k.current;
+    skyColor(v, glass.current.color);
+    skyEmissive(v, glass.current.emissive);
+    glass.current.emissiveIntensity = 0.55 + v * 0.1;
+    orbColor(v, orbMat.current.color);
+    orb.current.scale.setScalar(1 + v * 0.35);
+    halo.current.opacity = v * 0.7;
+    clouds.current.position.x = Math.sin(clock.elapsedTime * 0.15 + x) * 0.18;
+    for (const m of cloudMats.current) m.opacity = v * 0.9;
+  });
+  return (
+    <group position={[x, 3.6, -0.34]} scale={0.8}>
+      <mesh>
+        <boxGeometry args={[2.2, 3.4, 0.12]} />
+        <meshStandardMaterial color="#5a3721" roughness={0.6} />
+      </mesh>
+      <mesh position={[0, 0, 0.065]}>
+        <planeGeometry args={[1.9, 3.1]} />
+        <meshStandardMaterial ref={glass} color="#1d3557" emissive="#5f8fd6" emissiveIntensity={0.55} />
+      </mesh>
+      {/* halo del sol */}
+      <mesh position={[0.45, 0.85, 0.07]}>
+        <circleGeometry args={[0.62, 40]} />
+        <meshBasicMaterial ref={halo} color="#ffd36a" transparent opacity={0} depthWrite={false} blending={THREE.AdditiveBlending} toneMapped={false} />
+      </mesh>
+      {/* luna / sol */}
+      <mesh ref={orb} position={[0.45, 0.85, 0.075]}>
+        <circleGeometry args={[0.22, 32]} />
+        <meshBasicMaterial ref={orbMat} color="#fff6d8" toneMapped={false} />
+      </mesh>
+      {/* nubes */}
+      <group ref={clouds} position={[-0.3, -0.2, 0.072]}>
+        {[
+          [0, 0, 0.17],
+          [0.2, 0.05, 0.13],
+          [-0.18, 0.02, 0.12],
+          [0.45, -0.55, 0.1],
+          [0.62, -0.5, 0.08],
+        ].map(([cx, cy, r], i) => (
+          <mesh key={i} position={[cx, cy, 0]}>
+            <circleGeometry args={[r, 24]} />
+            <meshBasicMaterial
+              ref={(m) => {
+                if (m) cloudMats.current[i] = m;
+              }}
+              color="#ffffff"
+              transparent
+              opacity={0}
+              depthWrite={false}
+            />
+          </mesh>
+        ))}
+      </group>
+      {/* marco en cruz */}
+      <mesh position={[0, 0, 0.08]}>
+        <boxGeometry args={[0.06, 3.1, 0.03]} />
+        <meshStandardMaterial color="#5a3721" />
+      </mesh>
+      <mesh position={[0, 0.2, 0.08]}>
+        <boxGeometry args={[1.9, 0.06, 0.03]} />
+        <meshStandardMaterial color="#5a3721" />
+      </mesh>
+    </group>
+  );
+}
+
 // ---------- habitación ----------
-function Room() {
+function Room({ k }: { k: DayRef }) {
   const floor = useWoodFloor();
   const wall = useWallpaper();
   return (
@@ -157,31 +282,12 @@ function Room() {
         <meshStandardMaterial color="#d9a55a" roughness={1} />
       </mesh>
 
-      {/* ventanas con luz de luna */}
-      {[-7.3, 7.3].map((x) => (
-        <group key={x} position={[x, 3.3, -0.34]}>
-          <mesh>
-            <boxGeometry args={[2.2, 3.4, 0.12]} />
-            <meshStandardMaterial color="#5a3721" roughness={0.6} />
-          </mesh>
-          <mesh position={[0, 0, 0.065]}>
-            <planeGeometry args={[1.9, 3.1]} />
-            <meshStandardMaterial color="#1d3557" emissive="#5f8fd6" emissiveIntensity={0.55} />
-          </mesh>
-          <mesh position={[0, 0, 0.08]}>
-            <boxGeometry args={[0.06, 3.1, 0.03]} />
-            <meshStandardMaterial color="#5a3721" />
-          </mesh>
-          <mesh position={[0, 0.2, 0.08]}>
-            <boxGeometry args={[1.9, 0.06, 0.03]} />
-            <meshStandardMaterial color="#5a3721" />
-          </mesh>
-          <mesh position={[0.45, 0.85, 0.075]}>
-            <circleGeometry args={[0.22, 32]} />
-            <meshBasicMaterial color="#fff6d8" toneMapped={false} />
-          </mesh>
-        </group>
+      {/* ventanas: luna de noche, sol de día */}
+      {[-5.75, 5.75].map((x) => (
+        <SkyWindow key={x} x={x} k={k} />
       ))}
+      <SunBeam from={[-5.75, 3.9, -0.2]} to={[-3.4, 0.02, 4]} k={k} />
+      <SunBeam from={[5.75, 3.9, -0.2]} to={[3.4, 0.02, 4]} k={k} />
 
       {/* lámparas colgantes */}
       {[-2.6, 2.6].map((x) => (
@@ -818,12 +924,34 @@ function Director(props: Props & { ladderX: MutableRefObject<number>; ladderTarg
   );
 }
 
-function Lights({ shadows }: { shadows: boolean }) {
+const ambColor = mix("#ffd9b0", "#fff1de");
+const hemiSky = mix("#ffd7a8", "#fff4e0");
+const hemiGround = mix("#2a1a10", "#6b5040");
+function Lights({ shadows, k }: { shadows: boolean; k: DayRef }) {
+  const amb = useRef<THREE.AmbientLight>(null!);
+  const hemi = useRef<THREE.HemisphereLight>(null!);
+  const spot = useRef<THREE.SpotLight>(null!);
+  const moon = useRef<THREE.DirectionalLight>(null!);
+  const sunL = useRef<THREE.DirectionalLight>(null!);
+  const sunR = useRef<THREE.DirectionalLight>(null!);
+  useFrame(() => {
+    const v = k.current;
+    amb.current.intensity = 0.28 + v * 0.85;
+    ambColor(v, amb.current.color);
+    hemi.current.intensity = 0.45 + v * 1.1;
+    hemiSky(v, hemi.current.color);
+    hemiGround(v, hemi.current.groundColor);
+    spot.current.intensity = 2.6 + v * 0.9;
+    moon.current.intensity = 0.45 * (1 - v);
+    sunL.current.intensity = v * 2.2;
+    sunR.current.intensity = v * 1.8;
+  });
   return (
     <>
-      <ambientLight intensity={0.28} color="#ffd9b0" />
-      <hemisphereLight args={["#ffd7a8", "#2a1a10", 0.45]} />
+      <ambientLight ref={amb} intensity={0.28} color="#ffd9b0" />
+      <hemisphereLight ref={hemi} args={["#ffd7a8", "#2a1a10", 0.45]} />
       <spotLight
+        ref={spot}
         position={[4.5, 9, 8]}
         angle={0.55}
         penumbra={0.8}
@@ -835,7 +963,10 @@ function Lights({ shadows }: { shadows: boolean }) {
         shadow-bias={-0.0004}
         target-position={[0, 2.4, 0]}
       />
-      <directionalLight position={[-9, 5, 4]} intensity={0.45} color="#8fb6ff" />
+      <directionalLight ref={moon} position={[-9, 5, 4]} intensity={0.45} color="#8fb6ff" />
+      {/* luz de sol entrando por las ventanas */}
+      <directionalLight ref={sunL} position={[-9, 7, 1]} intensity={0} color="#ffe7b8" />
+      <directionalLight ref={sunR} position={[9, 7, 1]} intensity={0} color="#ffe7b8" />
       <pointLight position={[0, 1.2, 5]} intensity={0.6} color="#7cebf5" distance={6} decay={1.5} />
     </>
   );
@@ -855,6 +986,7 @@ function ReadyNotifier({ onReady }: { onReady: () => void }) {
 export default function Scene3D(props: Props) {
   const ladderX = useRef(3.2);
   const ladderTarget = useRef(3.2);
+  const dayK = useRef(props.day ? 1 : 0);
   const [mobile] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches);
   const shadows = !mobile;
   return (
@@ -867,9 +999,10 @@ export default function Scene3D(props: Props) {
     >
       <color attach="background" args={["#140e0a"]} />
       <fog attach="fog" args={["#140e0a", 14, 34]} />
+      <DayCycle day={props.day} k={dayK} />
       <Suspense fallback={null}>
-        <Lights shadows={shadows} />
-        <Room />
+        <Lights shadows={shadows} k={dayK} />
+        <Room k={dayK} />
         <Shelf />
         <DecoBooks />
         <Ladder xRef={ladderX} target={ladderTarget} />
