@@ -25,8 +25,8 @@ export default function Hero() {
   return (
     <section ref={ref} id="inicio" className="relative overflow-hidden">
       {/* manchas de luz animadas */}
-      <div className="pointer-events-none absolute -left-40 top-10 h-[480px] w-[480px] animate-[blob_18s_ease-in-out_infinite] bg-accent/25 blur-[90px]" aria-hidden />
-      <div className="pointer-events-none absolute -right-32 bottom-0 h-[420px] w-[420px] animate-[blob_22s_ease-in-out_infinite_reverse] bg-glow/15 blur-[100px]" aria-hidden />
+      <div className="pointer-events-none absolute -left-40 top-10 h-[480px] w-[480px] animate-blob bg-accent/25 blur-[90px]" aria-hidden />
+      <div className="pointer-events-none absolute -right-32 bottom-0 h-[420px] w-[420px] animate-blob-slow bg-glow/15 blur-[100px]" aria-hidden />
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-24 pt-14 sm:px-6 md:min-h-[calc(100svh-4rem)] md:grid-cols-[1.25fr_1fr] md:pt-0">
         <motion.div style={{ y: yText, opacity: fade }}>
@@ -78,7 +78,7 @@ export default function Hero() {
                 <span
                   key={b.label}
                   className="absolute hidden whitespace-nowrap rounded-full border border-line bg-card/90 px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur sm:inline-flex sm:items-center sm:gap-1.5"
-                  style={{ left: b.x, top: b.y, transform: "translateZ(60px)", animation: `float 5s ease-in-out ${b.d}s infinite` }}
+                  style={{ left: b.x, top: b.y, transform: "translateZ(60px)", animation: "var(--animate-float)", animationDelay: `${b.d}s` }}
                 >
                   <Sparkles size={12} className="text-accent" aria-hidden /> {b.label}
                 </span>

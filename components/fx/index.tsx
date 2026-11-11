@@ -170,7 +170,7 @@ export function Marquee({ items, reverse = false, className }: { items: string[]
   const row = [...items, ...items];
   return (
     <div className={`group relative flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)] ${className ?? ""}`}>
-      <div className={`flex shrink-0 gap-4 pr-4 ${reverse ? "animate-[marquee_38s_linear_infinite_reverse]" : "animate-[marquee_38s_linear_infinite]"} group-hover:[animation-play-state:paused]`}>
+      <div className={`flex shrink-0 gap-4 pr-4 ${reverse ? "animate-marquee-reverse" : "animate-marquee"} group-hover:[animation-play-state:paused]`}>
         {row.map((t, i) => (
           <span key={i} className="whitespace-nowrap rounded-full border border-line bg-card px-5 py-2.5 font-display text-lg font-medium">
             {t}
