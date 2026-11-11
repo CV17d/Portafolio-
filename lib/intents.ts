@@ -22,9 +22,10 @@ const keywords: Record<BookId, string[]> = {
     "proyect", "trabajos", "portafolio", "app", "aplicacion", "juego", "videojuego", "smartwatch", "reloj", "que ha hecho", "que has hecho", "creado", "desarroll",
     "project", "portfolio", "game", "watch", "built", "made", "develop",
   ],
+  visitas: ["visita", "empresa", "visit", "company"],
   testimonios: ["testimon", "opinion", "dicen", "recomend", "referencia", "resena", "review", "say about", "reference"],
   experiencia: [
-    "experien", "estudi", "universidad", "trabajo", "laboral", "freelance", "academ", "carrera", "empleo", "practica", "nutriweb", "hackaton", "formacion",
+    "experien", "estudi", "universidad", "trabajo", "laboral", "freelance", "academ", "carrera", "empleo", "practica", "hackaton", "formacion",
     "work", "job", "studies", "study", "university", "college", "degree", "education", "career", "hackathon",
   ],
   certificados: ["certific", "curso", "idioma", "ingles", "coderhouse", "sena", "diploma", "logro", "course", "language", "english", "spanish", "achievement"],
@@ -35,7 +36,7 @@ const keywords: Record<BookId, string[]> = {
 };
 
 export function parseIntent(raw: string, lang: Lang = "es"): Intent {
-  const { projects, visits, experience } = content[lang];
+  const { projects, visits } = content[lang];
   const text = ` ${normalize(raw)} `;
   if (!text.trim()) return { kind: "unknown" };
 
@@ -45,8 +46,8 @@ export function parseIntent(raw: string, lang: Lang = "es"): Intent {
   // Visita empresarial: van al final del libro de Experiencia
   const visitAliases: Record<string, string[]> = { ciandt: ["ci t", "ciandt", "ci and t", "ci&t"], ceiba: ["ceiba"], sofka: ["sofka"] };
   const vIdx = visits.findIndex((v) => (visitAliases[v.slug] ?? [normalize(v.company)]).some((a) => text.includes(` ${a} `) || text.includes(a.replace(" ", ""))));
-  if (vIdx >= 0) return { kind: "book", book: "experiencia", page: experience.length + vIdx };
-  if (/visita|empresa|casa(s)? de software|visit|compan|software house/.test(text)) return { kind: "book", book: "experiencia", page: experience.length };
+  if (vIdx >= 0) return { kind: "book", book: "visitas", page: vIdx };
+  if (/visita|empresa|casa(s)? de software|visit|compan|software house/.test(text)) return { kind: "book", book: "visitas" };
 
   // Proyecto concreto: abrir el libro en su página
   const idx = projects.findIndex((p) => text.includes(normalize(p.title).split(" ")[0]));

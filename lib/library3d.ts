@@ -24,12 +24,13 @@ export const rowBottom = (row: number) => SHELF.baseY + row * SHELF.rowH + SHELF
 
 export type Slot = { id: BookId; x: number; row: number; w: number; h: number; d: number; color: string };
 
-// Los 6 libros con contenido, escondidos entre los demás
+// Los 7 libros con contenido (uno por sección), cada uno con su placa de bronce
 export const SLOTS: Slot[] = [
   { id: "sobre-mi", x: -3.05, row: 2, w: 0.17, h: 0.68, d: 0.44, color: "#C4561E" },
   { id: "proyectos", x: -1.15, row: 4, w: 0.19, h: 0.7, d: 0.44, color: "#2F7A64" },
   { id: "testimonios", x: 0.75, row: 3, w: 0.17, h: 0.66, d: 0.44, color: "#8E2F42" },
   { id: "experiencia", x: 2.45, row: 5, w: 0.18, h: 0.69, d: 0.44, color: "#3B5BA9" },
+  { id: "visitas", x: 3.3, row: 2, w: 0.18, h: 0.68, d: 0.44, color: "#B0322F" },
   { id: "certificados", x: 1.55, row: 1, w: 0.17, h: 0.67, d: 0.44, color: "#C1922F" },
   { id: "contacto", x: -2.2, row: 0, w: 0.17, h: 0.66, d: 0.44, color: "#6A4FA0" },
 ];

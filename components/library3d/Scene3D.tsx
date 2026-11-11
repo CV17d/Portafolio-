@@ -155,7 +155,7 @@ function SunBeam({ from, to, k }: { from: [number, number, number]; to: [number,
     ref.current.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
   });
   useFrame(({ clock }) => {
-    mat.current.opacity = k.current * (0.07 + Math.sin(clock.elapsedTime * 0.8) * 0.012);
+    mat.current.opacity = k.current * (0.04 + Math.sin(clock.elapsedTime * 0.8) * 0.008);
     ref.current.visible = k.current > 0.02;
   });
   return (
@@ -499,11 +499,74 @@ function DecoBooks() {
 
 type BookAnim = { id: BookId | null; pull: number; hidden: boolean };
 
-function InteractiveBook({ slot, anim, disabled, onClick, hovered }: { slot: Slot; anim: MutableRefObject<BookAnim>; disabled: boolean; onClick: () => void; hovered: MutableRefObject<Hovered> }) {
+// Placa de bronce con el nombre de la sección (textura de canvas, cambia con el idioma)
+function usePlaqueTexture(title: string) {
+  const tex = useMemo(() => {
+    const W = 512;
+    const H = 112;
+    const c = document.createElement("canvas");
+    c.width = W;
+    c.height = H;
+    const g = c.getContext("2d")!;
+    const grad = g.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, "#f3d58f");
+    grad.addColorStop(0.5, "#c99a4b");
+    grad.addColorStop(1, "#8f6428");
+    g.fillStyle = grad;
+    g.beginPath();
+    g.roundRect(4, 4, W - 8, H - 8, 18);
+    g.fill();
+    g.strokeStyle = "rgba(60,35,10,0.55)";
+    g.lineWidth = 4;
+    g.beginPath();
+    g.roundRect(14, 14, W - 28, H - 28, 12);
+    g.stroke();
+    let size = 52;
+    g.font = `700 ${size}px Georgia, "Times New Roman", serif`;
+    while (g.measureText(title).width > W - 70 && size > 26) {
+      size -= 2;
+      g.font = `700 ${size}px Georgia, "Times New Roman", serif`;
+    }
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.fillStyle = "rgba(255,240,200,0.55)";
+    g.fillText(title, W / 2, H / 2 + 3);
+    g.fillStyle = "#3a230f";
+    g.fillText(title, W / 2, H / 2 + 1);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 4;
+    return t;
+  }, [title]);
+  useEffect(() => () => tex.dispose(), [tex]);
+  return tex;
+}
+
+function InteractiveBook({ slot, title, anim, disabled, onClick, hovered }: { slot: Slot; title: string; anim: MutableRefObject<BookAnim>; disabled: boolean; onClick: () => void; hovered: MutableRefObject<Hovered> }) {
   const group = useRef<THREE.Group>(null!);
   const mat = useMemo(() => new THREE.MeshPhysicalMaterial({ color: slot.color, roughness: 0.45, clearcoat: 0.5, emissive: new THREE.Color(slot.color), emissiveIntensity: 0 }), [slot.color]);
   const [hover, setHover] = useState(false);
   const [cx, cy, cz] = slotCenter(slot);
+  const plaqueTex = usePlaqueTexture(title);
+  const plaque = useRef<THREE.Mesh>(null!);
+  const plaqueMat = useRef<THREE.MeshStandardMaterial>(null!);
+  // La placa cuelga bajo la repisa donde está el libro
+  const plaqueY = SHELF.baseY + slot.row * SHELF.rowH - 0.135;
+  const handlers = {
+    onPointerOver: (e: ThreeEvent<PointerEvent>) => {
+      e.stopPropagation();
+      setHover(true);
+      document.body.style.cursor = disabled ? "default" : "pointer";
+    },
+    onPointerOut: () => {
+      setHover(false);
+      document.body.style.cursor = "";
+    },
+    onClick: (e: ThreeEvent<MouseEvent>) => {
+      e.stopPropagation();
+      if (!disabled) onClick();
+    },
+  };
 
   useFrame(({ clock }, dt) => {
     const a = anim.current;
@@ -516,6 +579,9 @@ function InteractiveBook({ slot, anim, disabled, onClick, hovered }: { slot: Slo
     g.rotation.x = THREE.MathUtils.damp(g.rotation.x, hover && !mine ? -0.06 : 0, 8, dt);
     g.visible = !(mine && a.hidden);
     mat.emissiveIntensity = THREE.MathUtils.damp(mat.emissiveIntensity, hover ? 0.35 : 0.06 + Math.sin(clock.elapsedTime * 2 + cx) * 0.04, 8, dt);
+    plaqueMat.current.emissiveIntensity = THREE.MathUtils.damp(plaqueMat.current.emissiveIntensity, hover ? 0.55 : 0.08, 8, dt);
+    const ps = THREE.MathUtils.damp(plaque.current.scale.x, hover ? 1.12 : 1, 10, dt);
+    plaque.current.scale.set(ps, ps, 1);
     if (hover && !mine) {
       hovered.current.id = slot.id;
       g.getWorldPosition(hovered.current.pos);
@@ -524,26 +590,14 @@ function InteractiveBook({ slot, anim, disabled, onClick, hovered }: { slot: Slo
   });
 
   return (
+    <>
+    {/* placa con el nombre de la sección */}
+    <mesh ref={plaque} position={[cx, plaqueY, SHELF.depth / 2 + 0.035]} {...handlers}>
+      <planeGeometry args={[0.98, 0.215]} />
+      <meshStandardMaterial ref={plaqueMat} map={plaqueTex} emissiveMap={plaqueTex} emissive="#ffffff" emissiveIntensity={0.08} metalness={0.35} roughness={0.35} />
+    </mesh>
     <group ref={group} position={[cx, cy, cz]}>
-      <RoundedBox
-        args={[slot.w, slot.h, slot.d]}
-        radius={0.012}
-        material={mat}
-        castShadow
-        onPointerOver={(e) => {
-          e.stopPropagation();
-          setHover(true);
-          document.body.style.cursor = disabled ? "default" : "pointer";
-        }}
-        onPointerOut={() => {
-          setHover(false);
-          document.body.style.cursor = "";
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (!disabled) onClick();
-        }}
-      />
+      <RoundedBox args={[slot.w, slot.h, slot.d]} radius={0.012} material={mat} castShadow {...handlers} />
       {[0.36, -0.36].map((k) => (
         <mesh key={k} position={[0, slot.h * k, slot.d / 2 + 0.002]}>
           <boxGeometry args={[slot.w * 0.98, 0.026, 0.004]} />
@@ -555,6 +609,7 @@ function InteractiveBook({ slot, anim, disabled, onClick, hovered }: { slot: Slo
         <meshStandardMaterial color="#000" transparent opacity={0.18} />
       </mesh>
     </group>
+    </>
   );
 }
 
@@ -917,7 +972,7 @@ function Director(props: Props & { ladderX: MutableRefObject<number>; ladderTarg
         <Robot3D ctrl={ctrl} eyeRef={eye} />
       </group>
       {SLOTS.map((s) => (
-        <InteractiveBook key={s.id} slot={s} anim={anim} hovered={hovered} disabled={props.busy} onClick={() => onBookClick(s.id)} />
+        <InteractiveBook key={s.id} slot={s} title={bookTitles[s.id]} anim={anim} hovered={hovered} disabled={props.busy} onClick={() => onBookClick(s.id)} />
       ))}
       <FlyingBook fly={fly} />
     </>

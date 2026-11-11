@@ -1,6 +1,6 @@
 import { content, type Lang } from "@/data/content";
 
-export type BookId = "sobre-mi" | "proyectos" | "testimonios" | "experiencia" | "certificados" | "contacto";
+export type BookId = "sobre-mi" | "proyectos" | "testimonios" | "experiencia" | "visitas" | "certificados" | "contacto";
 
 export type PageLink = { label: string; href: string };
 
@@ -68,7 +68,7 @@ const T = {
     contactForm: "Ir al formulario de contacto",
     contactNarration:
       "Si quieres hablar con Cristian, puedes escribirle a su correo o encontrarlo en LinkedIn y GitHub. Aquí tienes los enlaces, y también un formulario de contacto. ¡Seguro te responde pronto!",
-    bookTitles: { "sobre-mi": "Sobre mí", proyectos: "Proyectos", testimonios: "Testimonios", experiencia: "Experiencia", certificados: "Certificados", contacto: "Contacto" } as Record<BookId, string>,
+    bookTitles: { "sobre-mi": "Sobre mí", proyectos: "Proyectos", testimonios: "Testimonios", experiencia: "Experiencia", visitas: "Visitas", certificados: "Certificados", contacto: "Contacto" } as Record<BookId, string>,
   },
   en: {
     chapter: (n: number) => `Chapter ${n}`,
@@ -113,7 +113,7 @@ const T = {
     contactForm: "Go to the contact form",
     contactNarration:
       "If you'd like to talk with Cristian, you can email him or find him on LinkedIn and GitHub. Here are the links, plus a contact form. He'll surely get back to you soon!",
-    bookTitles: { "sobre-mi": "About me", proyectos: "Projects", testimonios: "Testimonials", experiencia: "Experience", certificados: "Certificates", contacto: "Contact" } as Record<BookId, string>,
+    bookTitles: { "sobre-mi": "About me", proyectos: "Projects", testimonios: "Testimonials", experiencia: "Experience", visitas: "Company visits", certificados: "Certificates", contacto: "Contact" } as Record<BookId, string>,
   },
 };
 
@@ -122,6 +122,7 @@ const COLORS: Record<BookId, string> = {
   proyectos: "#2F6F5E",
   testimonios: "#7A2E3A",
   experiencia: "#3B5BA9",
+  visitas: "#B0322F",
   certificados: "#B8862B",
   contacto: "#5B4A8A",
 };
@@ -216,7 +217,8 @@ function buildBooks(lang: Lang): Book[] {
     "sobre-mi": aboutPages,
     proyectos: projectPages,
     testimonios: testimonialPages,
-    experiencia: [...experiencePages, ...visitPages],
+    experiencia: experiencePages,
+    visitas: visitPages,
     certificados: certificatePages,
     contacto: contactPages,
   };
