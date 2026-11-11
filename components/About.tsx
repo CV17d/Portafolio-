@@ -1,15 +1,19 @@
+"use client";
+
 import { Dumbbell, Film, GraduationCap, MapPin, Music, PawPrint } from "lucide-react";
 import Section from "./Section";
 import { Marquee, Reveal, Tilt } from "./fx";
-import { profile, skills } from "@/data/portfolio";
+import { useLang } from "@/lib/i18n";
 
 const interestIcons = { music: Music, gym: Dumbbell, film: Film, paw: PawPrint };
 
 export default function About() {
+  const { t, c } = useLang();
+  const { profile, skills } = c;
   const all = skills.flatMap((g) => g.items);
   return (
     <>
-      <Section id="sobre-mi" kicker="Capítulo 1" title="Sobre mí">
+      <Section id="sobre-mi" kicker={t.chapter(1)} title={t.aboutTitle}>
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
           <div>
             <Reveal>
@@ -17,8 +21,8 @@ export default function About() {
             </Reveal>
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
               {[
-                { Icon: MapPin, k: "Ubicación", v: profile.location },
-                { Icon: GraduationCap, k: "Estudios", v: `${profile.career} · ${profile.university}` },
+                { Icon: MapPin, k: t.location, v: profile.location },
+                { Icon: GraduationCap, k: t.studies, v: `${profile.career} · ${profile.university}` },
               ].map(({ Icon, k, v }, i) => (
                 <Reveal key={k} delay={i * 0.1}>
                   <Tilt max={8} className="group rounded-2xl">
@@ -33,7 +37,7 @@ export default function About() {
               ))}
             </div>
             <Reveal delay={0.1}>
-              <h3 className="mt-10 font-semibold">Fuera del código</h3>
+              <h3 className="mt-10 font-semibold">{t.offCode}</h3>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {profile.interests.map((it) => {
                   const Icon = interestIcons[it.icon];
@@ -63,7 +67,7 @@ export default function About() {
           </div>
         </div>
       </Section>
-      <div className="space-y-4 py-4" aria-label="Tecnologías">
+      <div className="space-y-4 py-4" aria-label={t.technologies}>
         <Marquee items={all.slice(0, Math.ceil(all.length / 2))} />
         <Marquee items={all.slice(Math.ceil(all.length / 2))} reverse />
       </div>

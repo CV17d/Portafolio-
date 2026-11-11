@@ -6,7 +6,7 @@ import { ContactShadows, RoundedBox, Sparkles } from "@react-three/drei";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import Robot3D, { type RobotCtrl } from "./Robot3D";
-import { books, type BookId } from "@/lib/chapters";
+import type { BookId } from "@/lib/chapters";
 import { LADDER, LADDER_ANGLE, LADDER_LEN, SHELF, SLOTS, buildDecoBooks, slotById, slotCenter, type Slot } from "@/lib/library3d";
 
 export type ScenePhase = "idle" | "ack" | "walking" | "climbing" | "grabbing" | "descending" | "presenting" | "diving" | "reading" | "returning";
@@ -34,6 +34,7 @@ type Props = {
   onBookClick: (id: BookId) => void;
   onRobotClick: () => void;
   onReady: () => void;
+  bookTitles: Record<BookId, string>; // nombres de los libros en el idioma elegido
 };
 
 // ---------- utilidades ----------
@@ -515,7 +516,7 @@ function FlyingBook({ fly }: { fly: MutableRefObject<{ active: boolean; from: TH
 
 // ---------- director: cámara + robot + secuencias ----------
 function Director(props: Props & { ladderX: MutableRefObject<number>; ladderTarget: MutableRefObject<number> }) {
-  const { command, readerOpen, talking, overlay, reduced, onPhase, onRead, onBookClick, onRobotClick, ladderX, ladderTarget } = props;
+  const { command, readerOpen, talking, overlay, reduced, onPhase, onRead, onBookClick, onRobotClick, ladderX, ladderTarget, bookTitles } = props;
   const hovered = useRef<Hovered>({ id: null, pos: new THREE.Vector3() });
   const proj = useMemo(() => new THREE.Vector3(), []);
   const robot = useRef<THREE.Group>(null!);
@@ -788,7 +789,7 @@ function Director(props: Props & { ladderX: MutableRefObject<number>; ladderTarg
         const [x, y] = toScreen(h.pos);
         l.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -100%)`;
         l.style.opacity = "1";
-        if (overlay.labelText.current) overlay.labelText.current.textContent = books.find((bk) => bk.id === h.id)!.title;
+        if (overlay.labelText.current) overlay.labelText.current.textContent = bookTitles[h.id];
       } else l.style.opacity = "0";
     }
   });

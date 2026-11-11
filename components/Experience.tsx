@@ -1,7 +1,10 @@
+"use client";
+
 import { Briefcase, GraduationCap } from "lucide-react";
 import Section from "./Section";
 import { Reveal, ScrollLine } from "./fx";
-import { experience, type ExperienceItem } from "@/data/portfolio";
+import type { ExperienceItem } from "@/data/portfolio";
+import { useLang } from "@/lib/i18n";
 
 function Timeline({ items }: { items: ExperienceItem[] }) {
   return (
@@ -27,18 +30,20 @@ function Timeline({ items }: { items: ExperienceItem[] }) {
 }
 
 export default function Experience() {
+  const { t, c } = useLang();
+  const { experience } = c;
   return (
-    <Section id="experiencia" kicker="Capítulo 4" title="Experiencia">
+    <Section id="experiencia" kicker={t.chapter(4)} title={t.experienceTitle}>
       <div className="grid gap-16 lg:grid-cols-2">
         <div>
           <h3 className="mb-8 flex items-center gap-2 text-lg font-semibold">
-            <Briefcase size={20} className="text-accent" aria-hidden /> Laboral
+            <Briefcase size={20} className="text-accent" aria-hidden /> {t.work}
           </h3>
           <Timeline items={experience.filter((e) => e.type === "laboral")} />
         </div>
         <div>
           <h3 className="mb-8 flex items-center gap-2 text-lg font-semibold">
-            <GraduationCap size={20} className="text-accent" aria-hidden /> Académica
+            <GraduationCap size={20} className="text-accent" aria-hidden /> {t.academic}
           </h3>
           <Timeline items={experience.filter((e) => e.type === "academica")} />
         </div>

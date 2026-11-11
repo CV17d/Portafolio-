@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowDown, Download, Library, Sparkles } from "lucide-react";
-import { profile } from "@/data/portfolio";
+import { useLang } from "@/lib/i18n";
 import { Magnetic, SplitText, Tilt } from "./fx";
 import { openLibrary } from "./library/events";
 
@@ -17,6 +17,8 @@ const badges = [
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const { t, c } = useLang();
+  const { profile } = c;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const yText = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const yPhoto = useTransform(scrollYProgress, [0, 1], [0, -80]);
@@ -35,7 +37,7 @@ export default function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
-            Disponible para proyectos
+            {t.available}
           </motion.p>
           <h1 className="mt-6 font-display text-[clamp(3.4rem,10vw,7.5rem)] font-semibold leading-[0.88] tracking-tight">
             <SplitText text="Cristian" inView={false} delay={0.3} className="block" />
@@ -51,17 +53,17 @@ export default function Hero() {
             <Magnetic>
               <a href={profile.cv} download className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-accent px-6 py-4 font-semibold text-accent-ink shadow-[0_10px_30px_-8px_var(--accent)] transition hover:shadow-[0_16px_40px_-8px_var(--accent)]">
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" aria-hidden />
-                <Download size={18} aria-hidden /> Descargar CV
+                <Download size={18} aria-hidden /> {t.downloadCv}
               </a>
             </Magnetic>
             <Magnetic>
               <a href="#proyectos" className="inline-flex items-center gap-2 rounded-2xl border-2 border-ink px-6 py-3.5 font-semibold transition hover:bg-ink hover:text-paper">
-                Ver proyectos
+                {t.seeProjects}
               </a>
             </Magnetic>
             <Magnetic>
               <button type="button" onClick={openLibrary} className="inline-flex items-center gap-2 rounded-2xl px-4 py-3.5 font-semibold text-accent">
-                <Library size={18} aria-hidden /> Entrar a la biblioteca
+                <Library size={18} aria-hidden /> {t.enterLibrary}
               </button>
             </Magnetic>
           </motion.div>
@@ -72,7 +74,7 @@ export default function Hero() {
             <Tilt max={12} className="group rounded-[2.2rem]">
               <div className="absolute -inset-4 rotate-3 rounded-[2.6rem] bg-gradient-to-br from-accent/40 to-glow/30 blur-[2px]" style={{ transform: "translateZ(-40px) rotate(3deg)" }} aria-hidden />
               <div className="relative overflow-hidden rounded-[2.2rem] border-4 border-card shadow-2xl" style={{ transform: "translateZ(20px)" }}>
-                <Image src={profile.photo} alt="Foto de Cristian Velasco" width={589} height={1000} priority className="aspect-[4/5] w-full scale-105 object-cover object-[50%_42%] transition duration-700 group-hover:scale-110" />
+                <Image src={profile.photo} alt={t.photoAlt} width={589} height={1000} priority className="aspect-[4/5] w-full scale-105 object-cover object-[50%_42%] transition duration-700 group-hover:scale-110" />
               </div>
               {badges.map((b) => (
                 <span
@@ -88,8 +90,8 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <motion.a href="#sobre-mi" style={{ opacity: fade }} className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-ink-soft md:flex" aria-label="Bajar a Sobre mí">
-        Scroll
+      <motion.a href="#sobre-mi" style={{ opacity: fade }} className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-ink-soft md:flex" aria-label={t.scrollDown}>
+        {t.scroll}
         <motion.span animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}>
           <ArrowDown size={16} aria-hidden />
         </motion.span>

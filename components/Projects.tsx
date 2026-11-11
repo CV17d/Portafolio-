@@ -1,13 +1,17 @@
+"use client";
+
 import Image from "next/image";
 import { ArrowUpRight, Play } from "lucide-react";
 import Section from "./Section";
 import { GithubIcon } from "./Icons";
 import { Reveal, Tilt } from "./fx";
-import { projects } from "@/data/portfolio";
+import { useLang } from "@/lib/i18n";
 
 export default function Projects() {
+  const { t, c } = useLang();
+  const { projects } = c;
   return (
-    <Section id="proyectos" kicker="Capítulo 2" title="Mis proyectos">
+    <Section id="proyectos" kicker={t.chapter(2)} title={t.projectsTitle}>
       <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, i) => (
           <Reveal key={p.slug} delay={(i % 3) * 0.12} className={i === 0 ? "md:col-span-2 lg:col-span-2" : i === projects.length - 1 && projects.length % 3 === 0 ? "md:col-span-2 lg:col-span-3" : ""}>
@@ -17,7 +21,7 @@ export default function Projects() {
                 <div className={`relative overflow-hidden p-6 text-white ${i === 0 ? "aspect-[16/7]" : i === projects.length - 1 && projects.length % 3 === 0 ? "aspect-[16/10] md:aspect-[16/6] lg:aspect-[16/4.5]" : "aspect-[16/10]"}`} style={{ background: p.color, transform: "translateZ(30px)" }}>
                   {p.image && !p.device && (
                     <>
-                      <Image src={p.image} alt={`Captura de ${p.title}`} fill sizes="(max-width: 768px) 100vw, 66vw" className="object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+                      <Image src={p.image} alt={t.screenshotOf(p.title)} fill sizes="(max-width: 768px) 100vw, 66vw" className="object-cover object-top transition-transform duration-700 group-hover:scale-105" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" aria-hidden />
                     </>
                   )}

@@ -4,14 +4,16 @@ import Image from "next/image";
 import { Building2, Check } from "lucide-react";
 import Section from "./Section";
 import { Reveal, Tilt } from "./fx";
-import { visits } from "@/data/portfolio";
+import { useLang } from "@/lib/i18n";
 
 // Visitas empresariales: una fila por empresa, fotos como collage de polaroids.
 export default function Visits() {
+  const { t, c } = useLang();
+  const { visits } = c;
   return (
-    <Section id="visitas" kicker="Capítulo 5" title="Visitas empresariales">
+    <Section id="visitas" kicker={t.chapter(5)} title={t.visitsTitle}>
       <p className="-mt-4 mb-12 max-w-2xl text-lg text-ink-soft">
-        Conocer por dentro grandes casas de software me mostró cómo funciona el mundo laboral real: cómo se organizan los equipos, qué se espera de un desarrollador y cómo se construye software para millones de personas.
+        {t.visitsIntro}
       </p>
       <div className="space-y-20">
         {visits.map((v, i) => (
@@ -46,7 +48,7 @@ export default function Visits() {
                 </div>
               </div>
               <p className="mt-5 text-lg leading-relaxed">{v.summary}</p>
-              <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-accent">Lo que aprendí</p>
+              <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-accent">{t.learned}</p>
               <ul className="mt-3 space-y-2.5">
                 {v.learned.map((l) => (
                   <li key={l} className="flex gap-3 text-ink-soft">

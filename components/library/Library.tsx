@@ -1,34 +1,39 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { BookOpenText, Download, MousePointerClick, SendHorizontal, Volume2, VolumeX } from "lucide-react";
 import BookReader from "./BookReader";
 import { OPEN_LIBRARY } from "./events";
-import { bookById, type BookId } from "@/lib/chapters";
-import { lines, parseIntent, type Intent } from "@/lib/intents";
+import { bookById, getBooks, type BookId } from "@/lib/chapters";
+import { getLines, parseIntent, type Intent } from "@/lib/intents";
+import { useLang } from "@/lib/i18n";
+import { LangSwitch } from "../LanguagePicker";
 import { readingTime, speak, stopSpeaking } from "@/lib/speech";
 import type { SceneCommand, ScenePhase } from "../library3d/Scene3D";
-import { profile } from "@/data/portfolio";
 
 const Scene3D = dynamic(() => import("../library3d/Scene3D"), { ssr: false });
 
-const chips: { label: string; query: string }[] = [
-  { label: "Sobre Cristian", query: "¿Quién es Cristian?" },
-  { label: "Proyectos", query: "Muéstrame sus proyectos" },
-  { label: "Experiencia", query: "¿Qué experiencia tiene?" },
-  { label: "Testimonios", query: "¿Qué dicen de él?" },
-  { label: "Certificados", query: "¿Qué certificados tiene?" },
-  { label: "Contacto", query: "¿Cómo lo contacto?" },
-];
-
 export default function Library() {
   const reduce = useReducedMotion() ?? false;
+  const { lang, t, c } = useLang();
+  const { profile } = c;
+  const lines = getLines(lang);
+  // Refs para los callbacks de la escena 3D (que no se recrean al cambiar de idioma)
+  const linesRef = useRef(lines);
+  const tRef = useRef(t);
+  const langRef = useRef(lang);
+  useEffect(() => {
+    linesRef.current = lines;
+    tRef.current = t;
+    langRef.current = lang;
+  });
+  const bookTitles = useMemo(() => Object.fromEntries(getBooks(lang).map((b) => [b.id, b.title])) as Record<BookId, string>, [lang]);
   const [open, setOpen] = useState(true);
   const [ready, setReady] = useState(false);
   const [muted, setMuted] = useState(false);
-  const [bubble, setBubble] = useState(lines.greeting);
+  const [bubble, setBubble] = useState(() => getLines("es").greeting);
   const [talking, setTalking] = useState(false);
   const [busy, setBusy] = useState(false);
   const [command, setCommand] = useState<SceneCommand>(null);
@@ -60,10 +65,17 @@ export default function Library() {
     return () => clearTimeout(t);
   }, [open]);
 
+  // Al cambiar de idioma, Nigi vuelve a saludar en ese idioma
+  useEffect(() => {
+    stopSpeaking();
+    const tm = setTimeout(() => setBubble(getLines(lang).greeting), 0);
+    return () => clearTimeout(tm);
+  }, [lang]);
+
   useEffect(() => {
     const onOpen = () => {
       setOpen(true);
-      setBubble(lines.again());
+      setBubble(linesRef.current.again());
     };
     window.addEventListener(OPEN_LIBRARY, onOpen);
     return () => window.removeEventListener(OPEN_LIBRARY, onOpen);
@@ -99,16 +111,16 @@ export default function Library() {
       const req = pending.current;
       switch (p) {
         case "ack":
-          say(lines.ack());
+          say(linesRef.current.ack());
           break;
         case "climbing":
-          setBubble("¡Arriba voy! Bip, bip…");
+          setBubble(tRef.current.climbing);
           break;
         case "grabbing":
-          say("¡Lo tengo!", true);
+          say(linesRef.current.gotIt, true);
           break;
         case "presenting":
-          if (req) say(lines.found(bookById(req.book).title));
+          if (req) say(linesRef.current.found(bookById(req.book, langRef.current).title));
           break;
         case "diving":
           setBubble("");
@@ -116,7 +128,7 @@ export default function Library() {
         case "idle":
           setBusy(false);
           setCommand(null);
-          say(lines.again());
+          say(linesRef.current.again());
           break;
       }
     },
@@ -154,7 +166,7 @@ export default function Library() {
           say(lines.cv);
           const a = document.createElement("a");
           a.href = profile.cv;
-          a.download = "CV-Cristian-Velasco.pdf";
+          a.download = t.cvFile;
           a.click();
           break;
         }
@@ -165,13 +177,13 @@ export default function Library() {
           say(lines[intent.kind]);
       }
     },
-    [closeLibrary, request, say],
+    [closeLibrary, request, say, lines, profile.cv, t.cvFile],
   );
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!query.trim() || busy) return;
-    handleIntent(parseIntent(query));
+    handleIntent(parseIntent(query, lang));
     setQuery("");
   };
 
@@ -203,7 +215,7 @@ export default function Library() {
           exit={{ opacity: 0, scale: 1.04, filter: "blur(8px)" }}
           transition={{ duration: 0.6, ease: [0.7, 0, 0.3, 1] }}
           role="region"
-          aria-label="Biblioteca 3D interactiva de Cristian"
+          aria-label={t.libraryRegion}
         >
           {/* Escena 3D */}
           <div className="absolute inset-0">
@@ -218,6 +230,7 @@ export default function Library() {
               onRead={onRead}
               onBookClick={(id) => request(id)}
               onRobotClick={() => say(lines.greet)}
+              bookTitles={bookTitles}
               onReady={() => setTimeout(() => setReady(true), 400)}
             />
           </div>
@@ -257,13 +270,13 @@ export default function Library() {
               >
                 <div className="text-center">
                   <p className="font-display text-3xl font-semibold sm:text-5xl">
-                    {"La biblioteca".split("").map((ch, i) => (
+                    {t.loaderTitle.split("").map((ch, i) => (
                       <motion.span key={i} className="inline-block" initial={{ y: 30, opacity: 0, rotateX: -90 }} animate={{ y: 0, opacity: 1, rotateX: 0 }} transition={{ delay: i * 0.04, duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}>
                         {ch === " " ? " " : ch}
                       </motion.span>
                     ))}
                   </p>
-                  <p className="mt-3 text-sm tracking-[0.3em] text-[#f3e9dc]/50 uppercase">de Cristian Velasco</p>
+                  <p className="mt-3 text-sm tracking-[0.3em] text-[#f3e9dc]/50 uppercase">{t.loaderSub}</p>
                   <div className="mx-auto mt-8 h-[2px] w-48 overflow-hidden rounded bg-white/10">
                     <motion.div className="h-full bg-gradient-to-r from-[#f08a3c] to-[#7cebf5]" initial={{ x: "-100%" }} animate={{ x: "100%" }} transition={{ repeat: Infinity, duration: 1.1, ease: "easeInOut" }} />
                   </div>
@@ -282,20 +295,21 @@ export default function Library() {
             <div className="pointer-events-auto flex items-center gap-2">
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#f08a3c] font-display font-bold text-[#1c140f]">{profile.logo}</span>
               <div className="leading-tight">
-                <p className="font-display text-base font-semibold sm:text-lg">La biblioteca de Cristian</p>
-                <p className="hidden text-xs text-[#f3e9dc]/60 sm:block">Desarrollador Full-Stack · Pídele a Nigi lo que quieras saber</p>
+                <p className="font-display text-base font-semibold sm:text-lg">{t.libraryTitle}</p>
+                <p className="hidden text-xs text-[#f3e9dc]/60 sm:block">{t.librarySub}</p>
               </div>
             </div>
             <div className="pointer-events-auto flex items-center gap-2">
-              <button type="button" onClick={toggleMute} className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" aria-label={muted ? "Activar voz de Nigi" : "Silenciar a Nigi"}>
+              <LangSwitch className="border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" />
+              <button type="button" onClick={toggleMute} className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" aria-label={muted ? t.muteOn : t.muteOff}>
                 {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
               </button>
               <a href={profile.cv} download className="hidden h-10 items-center gap-1.5 rounded-xl border border-white/15 bg-black/30 px-3 text-sm font-semibold backdrop-blur hover:bg-white/10 sm:inline-flex">
                 <Download size={16} aria-hidden /> CV
               </a>
               <button type="button" onClick={closeLibrary} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#f3e9dc] px-3 text-sm font-semibold text-[#1c140f] transition hover:bg-white">
-                <BookOpenText size={16} aria-hidden /> <span className="hidden sm:inline">Modo lectura</span>
-                <span className="sm:hidden">Lectura</span>
+                <BookOpenText size={16} aria-hidden /> <span className="hidden sm:inline">{t.readingMode}</span>
+                <span className="sm:hidden">{t.readingShort}</span>
               </button>
             </div>
           </motion.div>
@@ -309,7 +323,7 @@ export default function Library() {
                 animate={{ opacity: 1, y: 0, transition: { delay: 2.4 } }}
                 exit={{ opacity: 0 }}
               >
-                <MousePointerClick size={14} aria-hidden /> Pasa el cursor por los libros, haz clic en uno o pregúntale a Nigi
+                <MousePointerClick size={14} aria-hidden /> {t.hint}
               </motion.p>
             )}
           </AnimatePresence>
@@ -323,12 +337,12 @@ export default function Library() {
           >
             <div className="mx-auto max-w-3xl">
               <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2.5 [scrollbar-width:none]">
-                {chips.map((c, i) => (
+                {t.chips.map((chip, i) => (
                   <motion.button
-                    key={c.label}
+                    key={chip.label}
                     type="button"
                     disabled={busy}
-                    onClick={() => handleIntent(parseIntent(c.query))}
+                    onClick={() => handleIntent(parseIntent(chip.query, lang))}
                     initial={{ opacity: 0, y: 12 }}
                     animate={ready ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 1.1 + i * 0.06 }}
@@ -336,22 +350,22 @@ export default function Library() {
                     whileTap={{ scale: 0.95 }}
                     className="shrink-0 rounded-full border border-white/15 bg-black/30 px-3.5 py-1.5 text-sm backdrop-blur transition-colors hover:border-[#7cebf5] hover:text-[#7cebf5] disabled:opacity-40"
                   >
-                    {c.label}
+                    {chip.label}
                   </motion.button>
                 ))}
               </div>
               <form onSubmit={onSubmit} className="flex gap-2">
-                <label htmlFor="nigi-input" className="sr-only">Pregúntale a Nigi</label>
+                <label htmlFor="nigi-input" className="sr-only">{t.askNigi}</label>
                 <input
                   id="nigi-input"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder={busy ? "Nigi está trabajando…" : "Pregúntale a Nigi, ej. ¿qué proyectos tiene?"}
+                  placeholder={busy ? t.busyPh : t.askPh}
                   disabled={busy}
                   autoComplete="off"
                   className="min-w-0 flex-1 rounded-2xl border border-white/15 bg-black/40 px-4 py-3.5 text-base text-[#f3e9dc] outline-none backdrop-blur transition placeholder:text-[#f3e9dc]/40 focus:border-[#7cebf5] focus:shadow-[0_0_0_4px_rgba(124,235,245,0.15)] disabled:opacity-50"
                 />
-                <motion.button whileTap={{ scale: 0.92 }} type="submit" disabled={busy || !query.trim()} className="grid w-14 place-items-center rounded-2xl bg-[#f08a3c] text-[#1c140f] transition disabled:opacity-40" aria-label="Enviar pregunta">
+                <motion.button whileTap={{ scale: 0.92 }} type="submit" disabled={busy || !query.trim()} className="grid w-14 place-items-center rounded-2xl bg-[#f08a3c] text-[#1c140f] transition disabled:opacity-40" aria-label={t.sendQuestion}>
                   <SendHorizontal size={20} />
                 </motion.button>
               </form>
@@ -362,7 +376,7 @@ export default function Library() {
             {readerOpen && reading && (
               <BookReader
                 key={reading.book}
-                book={bookById(reading.book)}
+                book={bookById(reading.book, lang)}
                 startPage={reading.page}
                 origin={{ x: typeof window !== "undefined" ? window.innerWidth / 2 : 0, y: typeof window !== "undefined" ? window.innerHeight / 2 : 0 }}
                 muted={muted}

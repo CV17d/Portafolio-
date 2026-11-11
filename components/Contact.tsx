@@ -5,12 +5,14 @@ import { AlertCircle, CheckCircle2, Loader2, Mail, Send } from "lucide-react";
 import Section from "./Section";
 import { GithubIcon, LinkedinIcon } from "./Icons";
 import { Reveal } from "./fx";
-import { contact } from "@/data/portfolio";
+import { useLang } from "@/lib/i18n";
 
 // Los mensajes llegan al correo de Cristian a través de Formspree.
 const FORMSPREE = "https://formspree.io/f/xqpqzbnq";
 
 export default function Contact() {
+  const { t, c } = useLang();
+  const { contact } = c;
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -31,10 +33,10 @@ export default function Contact() {
   const card = "flex items-center gap-3 rounded-2xl border border-line bg-card p-4 font-medium transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lg";
 
   return (
-    <Section id="contacto" kicker="Capítulo 6" title="Hablemos">
+    <Section id="contacto" kicker={t.chapter(6)} title={t.contactTitle}>
       <div className="grid gap-10 lg:grid-cols-2">
         <Reveal>
-          <p className="text-lg text-ink-soft">¿Tienes un proyecto, una vacante o una idea? Escríbeme y te respondo pronto.</p>
+          <p className="text-lg text-ink-soft">{t.contactIntro}</p>
           <ul className="mt-8 space-y-3">
             <li>
               <a href={`mailto:${contact.email}`} className={card}>
@@ -57,26 +59,26 @@ export default function Contact() {
         <Reveal delay={0.15}>
         <form onSubmit={onSubmit} className="grid gap-4 rounded-3xl border border-line bg-paper-2 p-6">
           <label className="grid gap-1.5 text-sm font-medium">
-            Nombre
-            <input name="nombre" required minLength={2} placeholder="Tu nombre" className={field} />
+            {t.name}
+            <input name="nombre" required minLength={2} placeholder={t.namePh} className={field} />
           </label>
           <label className="grid gap-1.5 text-sm font-medium">
-            Correo
-            <input name="email" type="email" required placeholder="tu@correo.com" className={field} />
+            {t.email}
+            <input name="email" type="email" required placeholder={t.emailPh} className={field} />
           </label>
           <label className="grid gap-1.5 text-sm font-medium">
-            Mensaje
-            <textarea name="mensaje" required minLength={10} rows={5} placeholder="Cuéntame en qué puedo ayudarte" className={field} />
+            {t.message}
+            <textarea name="mensaje" required minLength={10} rows={5} placeholder={t.messagePh} className={field} />
           </label>
           <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
-          <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portafolio" />
+          <input type="hidden" name="_subject" value={t.mailSubject} />
           <button disabled={status === "sending"} className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent py-3.5 font-semibold text-accent-ink transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70">
             {status === "sending" ? <Loader2 size={17} className="animate-spin" aria-hidden /> : <Send size={17} aria-hidden />}
-            {status === "sending" ? "Enviando…" : "Enviar mensaje"}
+            {status === "sending" ? t.sending : t.send}
           </button>
           <p role="status" aria-live="polite" className={`flex min-h-6 items-center justify-center gap-2 text-center font-medium ${status === "error" ? "text-red-500" : "text-accent"}`}>
-            {status === "sent" && (<><CheckCircle2 size={18} aria-hidden /> ¡Mensaje enviado! Te responderé pronto.</>)}
-            {status === "error" && (<><AlertCircle size={18} className="shrink-0" aria-hidden /> No se pudo enviar. Escríbeme directo a {contact.email}</>)}
+            {status === "sent" && (<><CheckCircle2 size={18} aria-hidden /> {t.sent}</>)}
+            {status === "error" && (<><AlertCircle size={18} className="shrink-0" aria-hidden /> {t.sendError(contact.email)}</>)}
           </p>
         </form>
         </Reveal>

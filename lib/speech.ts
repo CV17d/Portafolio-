@@ -5,6 +5,13 @@ import { voiceKey } from "./voiceLines";
 
 let cachedVoice: SpeechSynthesisVoice | null | undefined;
 let token = 0;
+let speechLang: "es" | "en" = "es";
+
+// Idioma de la voz del navegador (respaldo cuando no hay audio pregenerado).
+export function setSpeechLang(l: "es" | "en") {
+  if (l !== speechLang) cachedVoice = undefined;
+  speechLang = l;
+}
 let audio: HTMLAudioElement | null = null;
 
 // Audios pregenerados con la voz clonada de Nigi (public/voice/manifest.json → { clave: archivo }).
@@ -21,8 +28,17 @@ export const speechSupported = () => typeof window !== "undefined" && "speechSyn
 function score(v: SpeechSynthesisVoice) {
   const n = v.name.toLowerCase();
   const l = v.lang.toLowerCase();
-  if (!l.startsWith("es")) return -1;
+  if (!l.startsWith(speechLang)) return -1;
   let s = 0;
+  if (speechLang === "en") {
+    if (/natural|neural|online/.test(n)) s += 50;
+    if (/aria|jenny|ava|emma|michelle|ana|samantha|zira/.test(n)) s += 12; // voces suaves y jóvenes
+    if (/guy|davis|eric|christopher|roger|david|mark/.test(n)) s -= 8;
+    if (l === "en-us") s += 8;
+    if (/google/.test(n)) s += 20;
+    if (v.localService === false) s += 4;
+    return s;
+  }
   if (/natural|neural|online/.test(n)) s += 50; // voces neuronales, mucho más cálidas
   if (/salome|dalia|ximena|camila|elvira|paloma|sabina|helena|paulina|lupe|monica|elena/.test(n)) s += 12; // voces suaves y jóvenes
   if (/gonzalo|jorge|pablo|alvaro|raul|diego|enrique|carlos|tomas/.test(n)) s -= 8; // evitamos voces graves
@@ -104,7 +120,7 @@ function speakTTS(text: string, opts: SpeakOpts) {
   list.forEach((c, i) => {
     const u = new SpeechSynthesisUtterance(c.text.trim());
     if (voice) u.voice = voice;
-    u.lang = voice?.lang ?? "es-ES";
+    u.lang = voice?.lang ?? (speechLang === "en" ? "en-US" : "es-ES");
     u.rate = natural ? 1.22 : 1.18; // ritmo ágil, sin arrastrar
     u.pitch = natural ? 1.35 : 1.45; // voz juvenil y alegre
     u.volume = 1;

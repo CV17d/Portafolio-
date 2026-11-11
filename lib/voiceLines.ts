@@ -1,7 +1,8 @@
-// Todo lo que Nigi puede decir en voz alta. Con esta lista se pregeneran los
-// audios con su voz clonada (scripts/voice-lines.ts → public/voice/).
-import { books } from "./chapters";
-import { ACK, AGAIN, lines } from "./intents";
+// Todo lo que Nigi puede decir en voz alta, en ambos idiomas. Con esta lista se
+// pregeneran los audios con su voz (scripts/voice-lines.ts → public/voice/).
+import { LANGS, type Lang } from "@/data/content";
+import { getBooks } from "./chapters";
+import { dialogs } from "./intents";
 
 // Clave estable de un texto (FNV-1a de 32 bits sobre el texto normalizado).
 export function voiceKey(text: string) {
@@ -14,20 +15,15 @@ export function voiceKey(text: string) {
   return (h >>> 0).toString(16).padStart(8, "0");
 }
 
-export function allVoiceLines(): string[] {
-  const out = new Set<string>([
-    lines.greeting,
-    lines.cv,
-    lines.greet,
-    lines.thanks,
-    lines.unknown,
-    "¡Lo tengo!",
-    ...ACK,
-    ...AGAIN,
-  ]);
-  for (const b of books) {
-    out.add(lines.found(b.title));
-    for (const p of b.pages) out.add(p.narration);
+export function allVoiceLines(): { text: string; lang: Lang }[] {
+  const out = new Map<string, Lang>();
+  for (const lang of LANGS) {
+    const d = dialogs(lang);
+    for (const t of [d.greeting, d.cv, d.greet, d.thanks, d.unknown, d.gotIt, ...d.ack, ...d.again]) out.set(t, lang);
+    for (const b of getBooks(lang)) {
+      out.set(d.found(b.title), lang);
+      for (const p of b.pages) out.set(p.narration, lang);
+    }
   }
-  return [...out];
+  return [...out].map(([text, lang]) => ({ text, lang }));
 }

@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, ExternalLink, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
 import type { Book, Page } from "@/lib/chapters";
 import { readingTime, speak, stopSpeaking } from "@/lib/speech";
+import { useLang } from "@/lib/i18n";
 
 type Props = {
   book: Book;
@@ -95,6 +96,7 @@ function RightPage({ page, book, onNavigate }: { page: Page; book: Book; onNavig
 
 export default function BookReader({ book, startPage = 0, origin, muted, onToggleMute, onClose, onNavigate }: Props) {
   const reduce = useReducedMotion();
+  const { t } = useLang();
   const [index, setIndex] = useState(startPage);
   const [flip, setFlip] = useState<{ id: number; dir: 1 | -1 } | null>(null);
   const [playing, setPlaying] = useState(true);
@@ -175,7 +177,7 @@ export default function BookReader({ book, startPage = 0, origin, muted, onToggl
       className="fixed inset-0 z-[90] overflow-hidden text-[#f3e9dc]"
       role="dialog"
       aria-modal="true"
-      aria-label={`Leyendo el libro ${book.title}`}
+      aria-label={t.readingBook(book.title)}
       initial={{ clipPath: `circle(0% at ${at})` }}
       animate={{ clipPath: `circle(150% at ${at})` }}
       exit={{ clipPath: `circle(0% at ${at})` }}
@@ -193,9 +195,9 @@ export default function BookReader({ book, startPage = 0, origin, muted, onToggl
         {["left-4 top-4 border-l-2 border-t-2", "right-4 top-4 border-r-2 border-t-2", "left-4 bottom-4 border-l-2 border-b-2", "right-4 bottom-4 border-r-2 border-b-2"].map((c, i) => (
           <motion.span key={c} className={`absolute h-10 w-10 border-[#7cebf5]/70 ${c}`} initial={{ opacity: 0, scale: 1.6 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6 + i * 0.05 }} />
         ))}
-        <p className="absolute left-8 top-6 font-mono text-[11px] tracking-[0.25em] text-[#7cebf5]/80">NIGI · MODO LECTURA</p>
+        <p className="absolute left-8 top-6 font-mono text-[11px] tracking-[0.25em] text-[#7cebf5]/80">{t.hudMode}</p>
         <p className="absolute right-8 top-6 font-mono text-[11px] tracking-[0.25em] text-[#7cebf5]/80">
-          PÁG {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
+          {t.hudPage} {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
         </p>
         <div className="absolute left-1/2 top-7 hidden h-px w-40 -translate-x-1/2 bg-[#7cebf5]/20 sm:block">
           <motion.div className="h-full bg-[#7cebf5]" animate={{ width: `${progress}%` }} />
@@ -289,22 +291,22 @@ export default function BookReader({ book, startPage = 0, origin, muted, onToggl
             </p>
             <div className="mt-3 flex items-center justify-between gap-2">
               <div className="flex items-center gap-1">
-                <button type="button" onClick={() => go(index - 1)} disabled={index === 0} className="grid h-10 w-10 place-items-center rounded-xl transition hover:bg-white/10 disabled:opacity-30" aria-label="Página anterior">
+                <button type="button" onClick={() => go(index - 1)} disabled={index === 0} className="grid h-10 w-10 place-items-center rounded-xl transition hover:bg-white/10 disabled:opacity-30" aria-label={t.prevPage}>
                   <ChevronLeft size={20} />
                 </button>
-                <button type="button" onClick={() => setPlaying((p) => !p)} className="grid h-10 w-10 place-items-center rounded-xl bg-[#7cebf5] text-black transition hover:scale-105" aria-label={playing ? "Pausar lectura" : "Continuar lectura"}>
+                <button type="button" onClick={() => setPlaying((p) => !p)} className="grid h-10 w-10 place-items-center rounded-xl bg-[#7cebf5] text-black transition hover:scale-105" aria-label={playing ? t.pause : t.resume}>
                   {playing ? <Pause size={18} /> : <Play size={18} />}
                 </button>
-                <button type="button" onClick={() => go(index + 1)} disabled={index === total - 1} className="grid h-10 w-10 place-items-center rounded-xl transition hover:bg-white/10 disabled:opacity-30" aria-label="Página siguiente">
+                <button type="button" onClick={() => go(index + 1)} disabled={index === total - 1} className="grid h-10 w-10 place-items-center rounded-xl transition hover:bg-white/10 disabled:opacity-30" aria-label={t.nextPage}>
                   <ChevronRight size={20} />
                 </button>
-                <button type="button" onClick={onToggleMute} className="grid h-10 w-10 place-items-center rounded-xl transition hover:bg-white/10" aria-label={muted ? "Activar voz" : "Silenciar voz"}>
+                <button type="button" onClick={onToggleMute} className="grid h-10 w-10 place-items-center rounded-xl transition hover:bg-white/10" aria-label={muted ? t.voiceOn : t.voiceOff}>
                   {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
                 </button>
               </div>
               <button type="button" onClick={onClose} className="inline-flex items-center gap-2 rounded-xl border border-white/25 px-3 py-2 text-sm font-semibold transition hover:bg-white/10">
-                <X size={16} aria-hidden /> <span className="hidden sm:inline">Volver a la biblioteca</span>
-                <span className="sm:hidden">Salir</span>
+                <X size={16} aria-hidden /> <span className="hidden sm:inline">{t.backToLibrary}</span>
+                <span className="sm:hidden">{t.exit}</span>
               </button>
             </div>
           </div>
