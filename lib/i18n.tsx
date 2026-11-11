@@ -95,7 +95,7 @@ const UI = {
     busyPh: "Nigi está trabajando…",
     sendQuestion: "Enviar pregunta",
     climbing: "¡Arriba voy! Bip, bip…",
-    cvFile: "CV-Cristian-Velasco.pdf",
+    cvChoose: "Elige el idioma",
     chips: [
       { label: "Sobre Cristian", query: "¿Quién es Cristian?" },
       { label: "Proyectos", query: "Muéstrame sus proyectos" },
@@ -196,7 +196,7 @@ const UI = {
     busyPh: "Nigi is working…",
     sendQuestion: "Send question",
     climbing: "Going up! Beep, beep…",
-    cvFile: "CV-Cristian-Velasco.pdf",
+    cvChoose: "Choose a language",
     chips: [
       { label: "About Cristian", query: "Who is Cristian?" },
       { label: "Projects", query: "Show me his projects" },

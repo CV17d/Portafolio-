@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ArrowDown, Download, Library, Sparkles } from "lucide-react";
+import { ArrowDown, ChevronDown, Download, Library, Sparkles } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { Magnetic, SplitText, Tilt } from "./fx";
+import CvMenu from "./CvMenu";
 import { openLibrary } from "./library/events";
 
 const badges = [
@@ -51,10 +52,11 @@ export default function Hero() {
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3, duration: 0.8 }} className="mt-9 flex flex-wrap items-center gap-3">
             <Magnetic>
-              <a href={profile.cv} download className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-accent px-6 py-4 font-semibold text-accent-ink shadow-[0_10px_30px_-8px_var(--accent)] transition hover:shadow-[0_16px_40px_-8px_var(--accent)]">
+              <CvMenu className="group relative inline-flex items-center gap-2 overflow-hidden rounded-2xl bg-accent px-6 py-4 font-semibold text-accent-ink shadow-[0_10px_30px_-8px_var(--accent)] transition hover:shadow-[0_16px_40px_-8px_var(--accent)]">
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" aria-hidden />
                 <Download size={18} aria-hidden /> {t.downloadCv}
-              </a>
+                <ChevronDown size={16} aria-hidden />
+              </CvMenu>
             </Magnetic>
             <Magnetic>
               <a href="#proyectos" className="inline-flex items-center gap-2 rounded-2xl border-2 border-ink px-6 py-3.5 font-semibold transition hover:bg-ink hover:text-paper">

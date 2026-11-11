@@ -5,6 +5,7 @@ import { Download, Menu, X, Library } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { LangSwitch } from "./LanguagePicker";
 import ThemeSwitch from "./ThemeSwitch";
+import CvMenu from "./CvMenu";
 import { openLibrary } from "./library/events";
 
 export default function Navbar() {
@@ -42,9 +43,9 @@ export default function Navbar() {
           >
             <Library size={16} aria-hidden /> {t.library}
           </button>
-          <a href={profile.cv} download className="inline-flex items-center gap-1.5 rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-paper transition hover:bg-accent hover:text-accent-ink">
+          <CvMenu align="right" className="inline-flex items-center gap-1.5 rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-paper transition hover:bg-accent hover:text-accent-ink">
             CV <Download size={15} aria-hidden />
-          </a>
+          </CvMenu>
           <button
             type="button"
             className="grid h-10 w-10 place-items-center rounded-xl border border-line lg:hidden"

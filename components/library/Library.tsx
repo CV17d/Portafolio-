@@ -11,6 +11,7 @@ import { getLines, parseIntent, type Intent } from "@/lib/intents";
 import { useLang } from "@/lib/i18n";
 import { LangSwitch } from "../LanguagePicker";
 import ThemeSwitch from "../ThemeSwitch";
+import CvMenu, { CV_FILES } from "../CvMenu";
 import { useTheme } from "@/lib/theme";
 import { readingTime, speak, stopSpeaking } from "@/lib/speech";
 import type { SceneCommand, ScenePhase } from "../library3d/Scene3D";
@@ -168,8 +169,8 @@ export default function Library() {
         case "cv": {
           say(lines.cv);
           const a = document.createElement("a");
-          a.href = profile.cv;
-          a.download = t.cvFile;
+          a.href = CV_FILES[lang].href;
+          a.download = CV_FILES[lang].file;
           a.click();
           break;
         }
@@ -180,7 +181,7 @@ export default function Library() {
           say(lines[intent.kind]);
       }
     },
-    [closeLibrary, request, say, lines, profile.cv, t.cvFile],
+    [closeLibrary, request, say, lines, lang],
   );
 
   const onSubmit = (e: FormEvent) => {
@@ -202,7 +203,7 @@ export default function Library() {
 
   useEffect(() => {
     if (!open || readerOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeLibrary();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && !e.defaultPrevented && closeLibrary();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, readerOpen, closeLibrary]);
@@ -309,9 +310,11 @@ export default function Library() {
               <button type="button" onClick={toggleMute} className="grid h-10 w-10 place-items-center rounded-xl border border-white/15 bg-black/30 backdrop-blur hover:bg-white/10" aria-label={muted ? t.muteOn : t.muteOff}>
                 {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
               </button>
-              <a href={profile.cv} download className="hidden h-10 items-center gap-1.5 rounded-xl border border-white/15 bg-black/30 px-3 text-sm font-semibold backdrop-blur hover:bg-white/10 sm:inline-flex">
-                <Download size={16} aria-hidden /> CV
-              </a>
+              <span className="hidden sm:inline-block">
+                <CvMenu dark align="right" className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-white/15 bg-black/30 px-3 text-sm font-semibold backdrop-blur hover:bg-white/10">
+                  <Download size={16} aria-hidden /> CV
+                </CvMenu>
+              </span>
               <button type="button" onClick={closeLibrary} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#f3e9dc] px-3 text-sm font-semibold text-[#1c140f] transition hover:bg-white">
                 <BookOpenText size={16} aria-hidden /> <span className="hidden sm:inline">{t.readingMode}</span>
                 <span className="sm:hidden">{t.readingShort}</span>

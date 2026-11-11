@@ -5,6 +5,7 @@ import { contact as contactEs, profile as profileEs, projects as projectsEs, tes
 export const profile: Profile = {
   ...profileEs,
   role: "Full-Stack Developer",
+  cv: "/cv-en.pdf",
   tagline: "Builder of end-to-end software solutions: from mobile and desktop apps to web platforms and smartwatch systems.",
   about:
     "I'm Cristian Velasco, a full-stack developer and Software Engineering student focused on building end-to-end tech products. I stand out for my quick technical understanding and leadership, combining web, mobile, IoT and AI tools to design scalable architectures. My focus is turning complex challenges —from urban telemetry to home automation and health interfaces— into innovative, efficient, high-impact software.",
