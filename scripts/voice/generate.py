@@ -14,8 +14,10 @@ OUT = ROOT / "public" / "voice"
 FFMPEG = sys.argv[1] if len(sys.argv) > 1 else "ffmpeg"
 API = "http://127.0.0.1:3900/generate"
 # Voz diseñada: joven, amigable y aguda. La semilla fija mantiene la misma voz en todas las frases.
-VOICE = {"language": "Spanish", "instruct": "female, young adult, high pitch", "seed": "7", "num_step": "32", "speed": "1.05"}
-# Ajustes de pronunciación (solo para el audio; el texto en pantalla no cambia).
+VOICE = {"instruct": "female, young adult, high pitch", "seed": "7", "num_step": "32", "speed": "1.05"}
+LANGUAGE = {"es": "Spanish", "en": "English"}
+# Ajustes de pronunciación por idioma (solo para el audio; el texto en pantalla no cambia).
+SAY_EN = {"Nigi": "Neeghee", "CI&T": "C I and T", "Cuaspud-Carlosama": "Cuaspud Carlosama", "SST Ion": "S S T Ion"}
 SAY = {
     "Nigi": "Nigui", "CI&T": "ci and ti", "LinkedIn": "Linkedin", "NestJS": "Nest yei es", "NutriWeb": "Nutri güeb", "Node.js": "Nod yei es", "Supabase": "Supa beis",
     "AWS": "a, doble ve, ese", "EC2": "e, ce, dos", "S3": "ese tres", "IAM": "i, a, eme",
@@ -39,18 +41,19 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     lines = json.loads((HERE / "lines.json").read_text(encoding="utf-8"))
     manifest = {}
-    for i, (key, text) in enumerate(lines.items(), 1):
+    for i, (key, line) in enumerate(lines.items(), 1):
+        text, lang = line["text"], line.get("lang", "es")
         mp3 = OUT / f"{key}.mp3"
         if not mp3.exists():
             wav = HERE / "tmp.wav"
             spoken = text
-            for a, b in SAY.items():
+            for a, b in (SAY_EN if lang == "en" else SAY).items():
                 spoken = spoken.replace(a, b)
-            wav.write_bytes(post({"text": spoken, **VOICE}, {}))
+            wav.write_bytes(post({"text": spoken, "language": LANGUAGE[lang], **VOICE}, {}))
             subprocess.run([FFMPEG, "-y", "-loglevel", "error", "-i", str(wav), "-ac", "1", "-b:a", "64k", str(mp3)], check=True)
             wav.unlink()
         manifest[key] = mp3.name
-        print(f"[{i}/{len(lines)}] {key} {text[:50]}", flush=True)
+        print(f"[{i}/{len(lines)}] {lang} {key}", flush=True)
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1), encoding="utf-8")
     print("listo:", len(manifest))
 

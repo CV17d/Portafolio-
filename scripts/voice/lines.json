@@ -1,45 +1,346 @@
 {
- "10359933": "¡Aquí está! «Testimonios». Ven, mira por mis ojos.",
- "13171993": "¿Quieres que te lea otro libro?",
- "9503e92d": "¡Bip bup! Soy Nigi, el bibliotecario de Cristian. Cada libro de esta biblioteca guarda una parte de su historia. ¿Qué te gustaría que te leyera hoy?",
- "0fe90310": "¡Claro! Aquí tienes la hoja de vida de Cristian. Se está descargando.",
- "9f5756a9": "¡Hola! Pregúntame por sus proyectos, su experiencia, sus certificados o cómo contactarlo.",
- "c81df434": "¡Con gusto! Bip bup. ¿Te leo algo más?",
- "2d95bbeb": "Mmm, ese libro no lo encuentro. Prueba con: proyectos, sobre mí, experiencia, testimonios, certificados o contacto.",
- "0a9c0827": "¡Lo tengo!",
- "2d19ac84": "¡Claro! En un momento te la paso.",
- "8c50bc8a": "¡Enseguida! Voy por ese libro.",
- "7fa7dc89": "Perfecto, dame un segundo y te lo leo.",
- "f1c4d97b": "¡Bip! Ya sé dónde está. Voy por él.",
- "9966ac73": "¿Qué más te gustaría saber de Cristian?",
- "d6fb96c4": "¡Listo! Pídeme otro cuando quieras.",
- "72c598e0": "¡Aquí está! «Sobre mí». Ven, mira por mis ojos.",
- "48a69c82": "Este es Cristian Velasco, desarrollador full-stack y estudiante de Ingeniería de Software. Le encanta construir productos de principio a fin, uniendo web, móvil, IoT e inteligencia artificial para resolver problemas reales: desde la movilidad urbana hasta la salud y la domótica.",
- "4633fefc": "Cristian es de Cuaspud-Carlosama, en Nariño, Colombia, y estudia Ingeniería de Software en la Universidad Cooperativa de Colombia. Fuera del código le gusta escuchar música, entrenar en el gimnasio, ver películas y pasar tiempo con sus cuatro perros.",
- "3cca6a00": "Su caja de herramientas: en frontend y móvil usa Next.js, React, React Native y Tailwind. En backend trabaja con NestJS, Spring Boot y Supabase, y tiene experiencia en la nube de AWS con servicios como Lambda, EC2, S3, CloudFront e IAM, que despliega con SST Ion. Maneja PostgreSQL y PostGIS, crea apps de escritorio con Electron, videojuegos con Unity y apps nativas con Kotlin y SwiftUI. Y se apoya en herramientas de inteligencia artificial como Cursor y Claude.",
- "8c38a1eb": "¡Aquí está! «Proyectos». Ven, mira por mis ojos.",
- "acaf3427": "En este libro hay 6 proyectos de Cristian. Te los leo uno por uno.",
- "40b11c1e": "NutriWeb, Plataforma clínica para nutricionista, en producción sobre AWS. Sistema web completo para un consultorio de nutrición: landing administrable desde un CMS propio, citas gratuitas sincronizadas con Google Calendar, venta de planes con pago en línea (Payphone, contado o diferido), agenda privada para que cada paciente programe sus sesiones y un panel de gestión de ingresos, pacientes y citas. Incluye correos automáticos, recordatorios y seguridad con sesiones JWT, rate limiting y auditoría.",
- "add3a88d": "Rutea Pasto, Telemetría colaborativa de transporte público. Sistema móvil de rastreo colaborativo que proyecta tiempos estimados de llegada (ETA) y posiciones de los buses en tiempo real mediante telemetría ciudadana y geolocalización.",
- "63ff3f5b": "OptiFlow, Software de salud ergonómica. Aplicación de escritorio multiplataforma y local-first que usa inteligencia artificial y visión por computadora para monitorear la salud visual, medir la fatiga y corregir la postura mediante pausas activas.",
- "ee30d01c": "Demencia No Límite, Videojuego FPS roguelike. Videojuego de terror psicológico en 3D con generación procedural de 30 niveles, jefes con dificultad adaptativa (AI Director) y mecánicas de degradación mental progresiva.",
- "cc1e5355": "GridMind, IoT y monitoreo energético. Sistema domótico integrado a hardware propio que mide el consumo de electrodomésticos en tiempo real, brinda recomendaciones con IA y permite el apagado remoto desde el celular.",
- "e6873b3c": "OmniRoute, Asistente logístico para smartwatch. App standalone para Wear OS que ayuda a repartidores a consultar su ruta, ver la parada actual, registrar llegadas o incidencias y confirmar entregas en segundos, incluso sin conexión gracias a una cola local que se sincroniza con el backend.",
- "31ac0db5": "Andrés Burbano, Nutricionista y entrenador · Cliente de NutriWeb, dice: Cristian entendió mi consultorio mejor que yo mismo. Entregó NutriWeb antes de lo acordado y desde el primer día todo funciona perfecto: mis pacientes agendan solos, pagan en línea y yo administro todo desde un panel. Es un programador serio, rápido y muy detallista.",
- "a51a7634": "Diego Morillo, Odontólogo · Cliente, dice: Adaptó su plataforma a mi consultorio odontológico en muy poco tiempo. Ahora mis pacientes reservan sus citas en línea y yo dejé de perder horas en el teléfono. Siempre estuvo atento a cada ajuste que le pedí.",
- "75a6554c": "Martín Morales, Colaborador en varios proyectos, dice: He trabajado con Cristian en varios proyectos y siempre es el que resuelve. Propone soluciones claras, escribe código ordenado y cumple los tiempos. Trabajar con él hace que todo el equipo avance más rápido.",
- "6a97e89d": "Luis Miguel López, Profesor de Frontend y Mobile Development, dice: Cristian fue de los estudiantes que siempre iban un paso adelante. Aprende rápido, investiga por su cuenta y lleva cada proyecto más allá de lo que se pide en clase, con interfaces cuidadas y bien construidas.",
- "0c3b1c14": "¡Aquí está! «Experiencia». Ven, mira por mis ojos.",
- "6532152d": "Desde enero de 2024 Cristian trabaja como desarrollador full-stack freelance. Lideró de principio a fin Nutriweb, un sistema web de agendamiento clínico con gestión de pacientes y suscripciones en línea. Y creó GridMind, que optimiza el consumo de energía del hogar con hardware IoT propio e inteligencia artificial.",
- "d548c8d4": "Actualmente estudia Ingeniería de Software en la Universidad Cooperativa de Colombia, en Pasto. Ha participado en tres hackatones de inteligencia artificial y tecnología, asistió a cuatro seminarios de ingeniería de software, y aprobó los cuatro niveles de inglés de la carrera.",
- "fe89e463": "Además se ha formado en Coderhouse, donde completó la carrera de Product Marketing y quedó en el top diez del curso de Product Manager, y en el SENA, en electrónica y robótica aplicada, innovación y emprendimiento.",
- "eb21d00b": "Cristian visitó CI&T, una de las grandes casas de software de Latinoamérica. Allí vio cómo equipos ágiles construyen productos para marcas globales, entendió la importancia del inglés y la comunicación con clientes, y descubrió qué buscan las empresas en un desarrollador junior.",
- "1cc3b419": "En Ceiba Software conoció el ciclo completo de un proyecto, desde la idea del cliente hasta producción. Habló con sus desarrolladores sobre revisiones de código, pruebas automatizadas y el valor de la mentoría en un equipo.",
- "949d1916": "En Casa Sofka, en Medellín, aprendió cómo una empresa colombiana acompaña a grandes compañías en su transformación digital, el papel de la calidad y la automatización de pruebas, y cómo es trabajar en el mundo laboral real.",
- "2ffc3a8b": "¡Aquí está! «Certificados». Ven, mira por mis ojos.",
- "b00f3092": "En Coderhouse completó la carrera de Product Marketing, y se certificó como Product Manager, donde quedó en el top diez de su grupo. También estudió Customer Experience, Inbound Marketing, y Community Manager y Publicidad.",
- "743a3b52": "En el SENA aprobó, con nota de cuatro punto cinco, un curso de ciento cuarenta y cuatro horas en electrónica y robótica aplicada a proyectos de ciencia, tecnología e innovación. Además participó en la Tecnoacademia de Nariño con formación en innovación y emprendimiento, y tomó el curso de inglés English Dot Works.",
- "35b60424": "Cristian habla español como lengua nativa. En inglés tiene nivel B1, certificado por su universidad tras aprobar los cuatro niveles de la carrera.",
- "09171f78": "¡Aquí está! «Contacto». Ven, mira por mis ojos.",
- "aa540985": "Si quieres hablar con Cristian, puedes escribirle a su correo o encontrarlo en LinkedIn y GitHub. Aquí tienes los enlaces, y también un formulario de contacto. ¡Seguro te responde pronto!"
+ "10359933": {
+  "text": "¡Aquí está! «Testimonios». Ven, mira por mis ojos.",
+  "lang": "es"
+ },
+ "13171993": {
+  "text": "¿Quieres que te lea otro libro?",
+  "lang": "es"
+ },
+ "9503e92d": {
+  "text": "¡Bip bup! Soy Nigi, el bibliotecario de Cristian. Cada libro de esta biblioteca guarda una parte de su historia. ¿Qué te gustaría que te leyera hoy?",
+  "lang": "es"
+ },
+ "0fe90310": {
+  "text": "¡Claro! Aquí tienes la hoja de vida de Cristian. Se está descargando.",
+  "lang": "es"
+ },
+ "9f5756a9": {
+  "text": "¡Hola! Pregúntame por sus proyectos, su experiencia, sus certificados o cómo contactarlo.",
+  "lang": "es"
+ },
+ "c81df434": {
+  "text": "¡Con gusto! Bip bup. ¿Te leo algo más?",
+  "lang": "es"
+ },
+ "2d95bbeb": {
+  "text": "Mmm, ese libro no lo encuentro. Prueba con: proyectos, sobre mí, experiencia, testimonios, certificados o contacto.",
+  "lang": "es"
+ },
+ "0a9c0827": {
+  "text": "¡Lo tengo!",
+  "lang": "es"
+ },
+ "2d19ac84": {
+  "text": "¡Claro! En un momento te la paso.",
+  "lang": "es"
+ },
+ "8c50bc8a": {
+  "text": "¡Enseguida! Voy por ese libro.",
+  "lang": "es"
+ },
+ "7fa7dc89": {
+  "text": "Perfecto, dame un segundo y te lo leo.",
+  "lang": "es"
+ },
+ "f1c4d97b": {
+  "text": "¡Bip! Ya sé dónde está. Voy por él.",
+  "lang": "es"
+ },
+ "9966ac73": {
+  "text": "¿Qué más te gustaría saber de Cristian?",
+  "lang": "es"
+ },
+ "d6fb96c4": {
+  "text": "¡Listo! Pídeme otro cuando quieras.",
+  "lang": "es"
+ },
+ "72c598e0": {
+  "text": "¡Aquí está! «Sobre mí». Ven, mira por mis ojos.",
+  "lang": "es"
+ },
+ "48a69c82": {
+  "text": "Este es Cristian Velasco, desarrollador full-stack y estudiante de Ingeniería de Software. Le encanta construir productos de principio a fin, uniendo web, móvil, IoT e inteligencia artificial para resolver problemas reales: desde la movilidad urbana hasta la salud y la domótica.",
+  "lang": "es"
+ },
+ "4633fefc": {
+  "text": "Cristian es de Cuaspud-Carlosama, en Nariño, Colombia, y estudia Ingeniería de Software en la Universidad Cooperativa de Colombia. Fuera del código le gusta escuchar música, entrenar en el gimnasio, ver películas y pasar tiempo con sus cuatro perros.",
+  "lang": "es"
+ },
+ "3cca6a00": {
+  "text": "Su caja de herramientas: en frontend y móvil usa Next.js, React, React Native y Tailwind. En backend trabaja con NestJS, Spring Boot y Supabase, y tiene experiencia en la nube de AWS con servicios como Lambda, EC2, S3, CloudFront e IAM, que despliega con SST Ion. Maneja PostgreSQL y PostGIS, crea apps de escritorio con Electron, videojuegos con Unity y apps nativas con Kotlin y SwiftUI. Y se apoya en herramientas de inteligencia artificial como Cursor y Claude.",
+  "lang": "es"
+ },
+ "8c38a1eb": {
+  "text": "¡Aquí está! «Proyectos». Ven, mira por mis ojos.",
+  "lang": "es"
+ },
+ "acaf3427": {
+  "text": "En este libro hay 6 proyectos de Cristian. Te los leo uno por uno.",
+  "lang": "es"
+ },
+ "40b11c1e": {
+  "text": "NutriWeb, Plataforma clínica para nutricionista, en producción sobre AWS. Sistema web completo para un consultorio de nutrición: landing administrable desde un CMS propio, citas gratuitas sincronizadas con Google Calendar, venta de planes con pago en línea (Payphone, contado o diferido), agenda privada para que cada paciente programe sus sesiones y un panel de gestión de ingresos, pacientes y citas. Incluye correos automáticos, recordatorios y seguridad con sesiones JWT, rate limiting y auditoría.",
+  "lang": "es"
+ },
+ "add3a88d": {
+  "text": "Rutea Pasto, Telemetría colaborativa de transporte público. Sistema móvil de rastreo colaborativo que proyecta tiempos estimados de llegada (ETA) y posiciones de los buses en tiempo real mediante telemetría ciudadana y geolocalización.",
+  "lang": "es"
+ },
+ "63ff3f5b": {
+  "text": "OptiFlow, Software de salud ergonómica. Aplicación de escritorio multiplataforma y local-first que usa inteligencia artificial y visión por computadora para monitorear la salud visual, medir la fatiga y corregir la postura mediante pausas activas.",
+  "lang": "es"
+ },
+ "ee30d01c": {
+  "text": "Demencia No Límite, Videojuego FPS roguelike. Videojuego de terror psicológico en 3D con generación procedural de 30 niveles, jefes con dificultad adaptativa (AI Director) y mecánicas de degradación mental progresiva.",
+  "lang": "es"
+ },
+ "cc1e5355": {
+  "text": "GridMind, IoT y monitoreo energético. Sistema domótico integrado a hardware propio que mide el consumo de electrodomésticos en tiempo real, brinda recomendaciones con IA y permite el apagado remoto desde el celular.",
+  "lang": "es"
+ },
+ "e6873b3c": {
+  "text": "OmniRoute, Asistente logístico para smartwatch. App standalone para Wear OS que ayuda a repartidores a consultar su ruta, ver la parada actual, registrar llegadas o incidencias y confirmar entregas en segundos, incluso sin conexión gracias a una cola local que se sincroniza con el backend.",
+  "lang": "es"
+ },
+ "31ac0db5": {
+  "text": "Andrés Burbano, Nutricionista y entrenador · Cliente de NutriWeb, dice: Cristian entendió mi consultorio mejor que yo mismo. Entregó NutriWeb antes de lo acordado y desde el primer día todo funciona perfecto: mis pacientes agendan solos, pagan en línea y yo administro todo desde un panel. Es un programador serio, rápido y muy detallista.",
+  "lang": "es"
+ },
+ "a51a7634": {
+  "text": "Diego Morillo, Odontólogo · Cliente, dice: Adaptó su plataforma a mi consultorio odontológico en muy poco tiempo. Ahora mis pacientes reservan sus citas en línea y yo dejé de perder horas en el teléfono. Siempre estuvo atento a cada ajuste que le pedí.",
+  "lang": "es"
+ },
+ "75a6554c": {
+  "text": "Martín Morales, Colaborador en varios proyectos, dice: He trabajado con Cristian en varios proyectos y siempre es el que resuelve. Propone soluciones claras, escribe código ordenado y cumple los tiempos. Trabajar con él hace que todo el equipo avance más rápido.",
+  "lang": "es"
+ },
+ "6a97e89d": {
+  "text": "Luis Miguel López, Profesor de Frontend y Mobile Development, dice: Cristian fue de los estudiantes que siempre iban un paso adelante. Aprende rápido, investiga por su cuenta y lleva cada proyecto más allá de lo que se pide en clase, con interfaces cuidadas y bien construidas.",
+  "lang": "es"
+ },
+ "0c3b1c14": {
+  "text": "¡Aquí está! «Experiencia». Ven, mira por mis ojos.",
+  "lang": "es"
+ },
+ "6532152d": {
+  "text": "Desde enero de 2024 Cristian trabaja como desarrollador full-stack freelance. Lideró de principio a fin Nutriweb, un sistema web de agendamiento clínico con gestión de pacientes y suscripciones en línea. Y creó GridMind, que optimiza el consumo de energía del hogar con hardware IoT propio e inteligencia artificial.",
+  "lang": "es"
+ },
+ "d548c8d4": {
+  "text": "Actualmente estudia Ingeniería de Software en la Universidad Cooperativa de Colombia, en Pasto. Ha participado en tres hackatones de inteligencia artificial y tecnología, asistió a cuatro seminarios de ingeniería de software, y aprobó los cuatro niveles de inglés de la carrera.",
+  "lang": "es"
+ },
+ "fe89e463": {
+  "text": "Además se ha formado en Coderhouse, donde completó la carrera de Product Marketing y quedó en el top diez del curso de Product Manager, y en el SENA, en electrónica y robótica aplicada, innovación y emprendimiento.",
+  "lang": "es"
+ },
+ "eb21d00b": {
+  "text": "Cristian visitó CI&T, una de las grandes casas de software de Latinoamérica. Allí vio cómo equipos ágiles construyen productos para marcas globales, entendió la importancia del inglés y la comunicación con clientes, y descubrió qué buscan las empresas en un desarrollador junior.",
+  "lang": "es"
+ },
+ "1cc3b419": {
+  "text": "En Ceiba Software conoció el ciclo completo de un proyecto, desde la idea del cliente hasta producción. Habló con sus desarrolladores sobre revisiones de código, pruebas automatizadas y el valor de la mentoría en un equipo.",
+  "lang": "es"
+ },
+ "949d1916": {
+  "text": "En Casa Sofka, en Medellín, aprendió cómo una empresa colombiana acompaña a grandes compañías en su transformación digital, el papel de la calidad y la automatización de pruebas, y cómo es trabajar en el mundo laboral real.",
+  "lang": "es"
+ },
+ "2ffc3a8b": {
+  "text": "¡Aquí está! «Certificados». Ven, mira por mis ojos.",
+  "lang": "es"
+ },
+ "b00f3092": {
+  "text": "En Coderhouse completó la carrera de Product Marketing, y se certificó como Product Manager, donde quedó en el top diez de su grupo. También estudió Customer Experience, Inbound Marketing, y Community Manager y Publicidad.",
+  "lang": "es"
+ },
+ "743a3b52": {
+  "text": "En el SENA aprobó, con nota de cuatro punto cinco, un curso de ciento cuarenta y cuatro horas en electrónica y robótica aplicada a proyectos de ciencia, tecnología e innovación. Además participó en la Tecnoacademia de Nariño con formación en innovación y emprendimiento, y tomó el curso de inglés English Dot Works.",
+  "lang": "es"
+ },
+ "35b60424": {
+  "text": "Cristian habla español como lengua nativa. En inglés tiene nivel B1, certificado por su universidad tras aprobar los cuatro niveles de la carrera.",
+  "lang": "es"
+ },
+ "09171f78": {
+  "text": "¡Aquí está! «Contacto». Ven, mira por mis ojos.",
+  "lang": "es"
+ },
+ "aa540985": {
+  "text": "Si quieres hablar con Cristian, puedes escribirle a su correo o encontrarlo en LinkedIn y GitHub. Aquí tienes los enlaces, y también un formulario de contacto. ¡Seguro te responde pronto!",
+  "lang": "es"
+ },
+ "13df4a95": {
+  "text": "Beep boop! I'm Nigi, Cristian's librarian. Every book in this library holds a part of his story. What would you like me to read to you today?",
+  "lang": "en"
+ },
+ "dd87a15c": {
+  "text": "Sure! Here's Cristian's resume. It's downloading now.",
+  "lang": "en"
+ },
+ "0e040383": {
+  "text": "Hi there! Ask me about his projects, his experience, his certificates or how to contact him.",
+  "lang": "en"
+ },
+ "e8c38241": {
+  "text": "My pleasure! Beep boop. Shall I read you something else?",
+  "lang": "en"
+ },
+ "cd428109": {
+  "text": "Hmm, I can't find that book. Try: projects, about me, experience, testimonials, certificates or contact.",
+  "lang": "en"
+ },
+ "c6d78a11": {
+  "text": "Got it!",
+  "lang": "en"
+ },
+ "a05f2016": {
+  "text": "Sure! I'll bring it to you in a moment.",
+  "lang": "en"
+ },
+ "fe7c306b": {
+  "text": "Right away! Going for that book.",
+  "lang": "en"
+ },
+ "aa5d8a0a": {
+  "text": "Perfect, give me a second and I'll read it to you.",
+  "lang": "en"
+ },
+ "ac815ba8": {
+  "text": "Beep! I know exactly where it is. On my way.",
+  "lang": "en"
+ },
+ "72abdaf7": {
+  "text": "Would you like me to read you another book?",
+  "lang": "en"
+ },
+ "3486893e": {
+  "text": "What else would you like to know about Cristian?",
+  "lang": "en"
+ },
+ "5713536b": {
+  "text": "All done! Ask me for another one anytime.",
+  "lang": "en"
+ },
+ "71910f2c": {
+  "text": "Here it is! \"About me\". Come, look through my eyes.",
+  "lang": "en"
+ },
+ "1c7ae79f": {
+  "text": "This is Cristian Velasco, a full-stack developer and Software Engineering student. He loves building products from start to finish, combining web, mobile, IoT and artificial intelligence to solve real problems: from urban mobility to health and home automation.",
+  "lang": "en"
+ },
+ "2ce3a392": {
+  "text": "Cristian is from Cuaspud-Carlosama, in Nariño, Colombia, and he studies Software Engineering at the Universidad Cooperativa de Colombia. Away from code, he enjoys listening to music, training at the gym, watching movies and spending time with his four dogs.",
+  "lang": "en"
+ },
+ "dbea5e03": {
+  "text": "His toolbox: for frontend and mobile he uses Next.js, React, React Native and Tailwind. On the backend he works with NestJS, Spring Boot and Supabase, and he has cloud experience on AWS with services like Lambda, EC2, S3, CloudFront and IAM, which he deploys with SST Ion. He handles PostgreSQL and PostGIS, builds desktop apps with Electron, video games with Unity and native apps with Kotlin and SwiftUI. And he relies on AI tools like Cursor and Claude.",
+  "lang": "en"
+ },
+ "ee3280db": {
+  "text": "Here it is! \"Projects\". Come, look through my eyes.",
+  "lang": "en"
+ },
+ "166d45cf": {
+  "text": "This book holds 6 of Cristian's projects. I'll read them to you one by one.",
+  "lang": "en"
+ },
+ "8bd45247": {
+  "text": "NutriWeb, Clinical platform for a nutritionist, live on AWS. A complete web system for a nutrition practice: a landing page managed from its own CMS, free appointments synced with Google Calendar, plan sales with online payments (Payphone, single or installment), a private schedule where each patient books their sessions, and a dashboard for revenue, patients and appointments. It includes automated emails, reminders and security with JWT sessions, rate limiting and audit logs.",
+  "lang": "en"
+ },
+ "c257fa07": {
+  "text": "Rutea Pasto, Collaborative public transport telemetry. A collaborative mobile tracking system that projects estimated arrival times (ETA) and bus positions in real time using citizen telemetry and geolocation.",
+  "lang": "en"
+ },
+ "019ed4de": {
+  "text": "OptiFlow, Ergonomic health software. A cross-platform, local-first desktop app that uses artificial intelligence and computer vision to monitor eye health, measure fatigue and correct posture through active breaks.",
+  "lang": "en"
+ },
+ "afa4b77c": {
+  "text": "Demencia No Límite, Roguelike FPS video game. A 3D psychological horror game with procedural generation of 30 levels, bosses with adaptive difficulty (AI Director) and progressive mental-degradation mechanics.",
+  "lang": "en"
+ },
+ "75d686d9": {
+  "text": "GridMind, IoT and energy monitoring. A home automation system built on custom hardware that measures appliance consumption in real time, gives AI-powered recommendations and allows remote shutdown from your phone.",
+  "lang": "en"
+ },
+ "f8b300fc": {
+  "text": "OmniRoute, Logistics assistant for smartwatch. A standalone Wear OS app that helps delivery drivers check their route, see the current stop, log arrivals or incidents and confirm deliveries in seconds, even offline thanks to a local queue that syncs with the backend.",
+  "lang": "en"
+ },
+ "3b5cffe5": {
+  "text": "Here it is! \"Testimonials\". Come, look through my eyes.",
+  "lang": "en"
+ },
+ "769248ea": {
+  "text": "Andrés Burbano, Nutritionist and trainer · NutriWeb client, says: Cristian understood my practice better than I did. He delivered NutriWeb ahead of schedule and everything has worked perfectly since day one: my patients book on their own, pay online, and I manage everything from a dashboard. He's a serious, fast and very detail-oriented developer.",
+  "lang": "en"
+ },
+ "42c0fe50": {
+  "text": "Diego Morillo, Dentist · Client, says: He adapted his platform to my dental practice in very little time. Now my patients book their appointments online and I no longer waste hours on the phone. He was always attentive to every adjustment I asked for.",
+  "lang": "en"
+ },
+ "5c0440f9": {
+  "text": "Martín Morales, Collaborator on several projects, says: I've worked with Cristian on several projects and he's always the one who gets things done. He proposes clear solutions, writes clean code and meets deadlines. Working with him makes the whole team move faster.",
+  "lang": "en"
+ },
+ "c46e4668": {
+  "text": "Luis Miguel López, Frontend and Mobile Development professor, says: Cristian was one of those students who was always a step ahead. He learns fast, researches on his own and takes every project beyond what's asked in class, with polished, well-built interfaces.",
+  "lang": "en"
+ },
+ "3652550d": {
+  "text": "Here it is! \"Experience\". Come, look through my eyes.",
+  "lang": "en"
+ },
+ "56f01f7e": {
+  "text": "Since January 2024, Cristian has worked as a freelance full-stack developer. He led NutriWeb from start to finish, a web system for clinical scheduling with patient management and online subscriptions. He also built GridMind, which optimizes home energy use with custom IoT hardware and artificial intelligence.",
+  "lang": "en"
+ },
+ "29762fa5": {
+  "text": "He's currently studying Software Engineering at the Universidad Cooperativa de Colombia, in Pasto. He has taken part in three AI and technology hackathons, attended four software engineering seminars, and passed all four English levels of his degree.",
+  "lang": "en"
+ },
+ "f8c02c86": {
+  "text": "He has also trained at Coderhouse, where he completed the Product Marketing career and finished in the top ten of the Product Manager course, and at SENA, in applied electronics and robotics, innovation and entrepreneurship.",
+  "lang": "en"
+ },
+ "36891e20": {
+  "text": "Cristian visited CI&T, one of the largest software companies in Latin America. There he saw how agile teams build products for global brands, understood the importance of English and client communication, and learned what companies look for in a junior developer.",
+  "lang": "en"
+ },
+ "28fbd895": {
+  "text": "At Ceiba Software he learned the full lifecycle of a project, from the client's idea to production. He talked with their developers about code reviews, automated testing and the value of mentorship within a team.",
+  "lang": "en"
+ },
+ "fb3c6d34": {
+  "text": "At Casa Sofka, in Medellín, he learned how a Colombian company supports large companies in their digital transformation, the role of quality and test automation, and what working in the real professional world is like.",
+  "lang": "en"
+ },
+ "0a3e902d": {
+  "text": "Here it is! \"Certificates\". Come, look through my eyes.",
+  "lang": "en"
+ },
+ "54dcc573": {
+  "text": "At Coderhouse he completed the Product Marketing career and earned his Product Manager certification, finishing in the top ten of his group. He also studied Customer Experience, Inbound Marketing, and Community Management and Advertising.",
+  "lang": "en"
+ },
+ "39153db1": {
+  "text": "At SENA he passed, with a grade of four point five, a one hundred and forty four hour course on electronics and robotics applied to science, technology and innovation projects. He also took part in the Nariño Tecnoacademia with training in innovation and entrepreneurship, and took the English Dot Works course.",
+  "lang": "en"
+ },
+ "1cf5e792": {
+  "text": "Cristian's native language is Spanish. His English level is B1, certified by his university after passing all four levels of his degree.",
+  "lang": "en"
+ },
+ "579d3a77": {
+  "text": "Here it is! \"Contact\". Come, look through my eyes.",
+  "lang": "en"
+ },
+ "6d14f571": {
+  "text": "If you'd like to talk with Cristian, you can email him or find him on LinkedIn and GitHub. Here are the links, plus a contact form. He'll surely get back to you soon!",
+  "lang": "en"
+ }
 }
