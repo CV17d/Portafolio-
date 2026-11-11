@@ -14,7 +14,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #17120f;
     --paper-2: #211a15;
     --ink: #f3e9dc;
@@ -25,6 +25,18 @@
     --glow: #5fdbe9;
     --card: #1f1813;
   }
+}
+
+:root[data-theme="dark"] {
+  --paper: #17120f;
+  --paper-2: #211a15;
+  --ink: #f3e9dc;
+  --ink-soft: #b9a895;
+  --line: #3a2e25;
+  --accent: #f08a46;
+  --accent-ink: #1a120c;
+  --glow: #5fdbe9;
+  --card: #1f1813;
 }
 
 @theme inline {
@@ -102,10 +114,12 @@
 }
 
 html {
+  transition: background-color 0.4s ease;
   scroll-padding-top: 5rem;
 }
 
 body {
+  transition: background-color 0.4s ease, color 0.4s ease;
   background: var(--paper);
   color: var(--ink);
 }

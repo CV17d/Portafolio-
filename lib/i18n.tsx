@@ -17,6 +17,8 @@ const UI = {
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
     switchLang: "Cambiar idioma",
+    lightMode: "Cambiar a modo claro",
+    darkMode: "Cambiar a modo oscuro",
     // hero
     available: "Disponible para proyectos",
     downloadCv: "Descargar CV",
@@ -125,6 +127,8 @@ const UI = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
     switchLang: "Change language",
+    lightMode: "Switch to light mode",
+    darkMode: "Switch to dark mode",
     available: "Available for projects",
     downloadCv: "Download CV",
     seeProjects: "See projects",

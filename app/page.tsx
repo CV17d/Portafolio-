@@ -12,11 +12,13 @@ import Footer from "@/components/Footer";
 import Library from "@/components/library/Library";
 import LanguagePicker from "@/components/LanguagePicker";
 import { LangProvider } from "@/lib/i18n";
+import { ThemeProvider } from "@/lib/theme";
 import { Cursor, ScrollProgress } from "@/components/fx";
 
 // La biblioteca de Nigi se abre encima; debajo vive el portafolio clásico ("modo lectura").
 export default function Home() {
   return (
+    <ThemeProvider>
     <LangProvider>
       <LanguagePicker />
       <Library />
@@ -35,5 +37,6 @@ export default function Home() {
       </main>
       <Footer />
     </LangProvider>
+    </ThemeProvider>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Download, Menu, X, Library } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 import { LangSwitch } from "./LanguagePicker";
+import ThemeSwitch from "./ThemeSwitch";
 import { openLibrary } from "./library/events";
 
 export default function Navbar() {
@@ -32,6 +33,7 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <ThemeSwitch className="border border-line hover:border-accent" />
           <LangSwitch className="border border-line hover:border-accent" />
           <button
             type="button"
