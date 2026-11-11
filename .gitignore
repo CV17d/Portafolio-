@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# notas locales y originales (no se publican)
+/DATOS.md
+/REQUISITOS.md
+/assets/
+/skills-lock.json
+/.claude/
+/.agents/
+/scripts/voice/muestra-voz-nigi.mp3
+/scripts/voice/tmp.wav
