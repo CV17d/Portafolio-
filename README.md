@@ -2,6 +2,8 @@
 
 Portafolio de **Cristian Javier Velasco Burbano**, desarrollador full-stack.
 
+**🌐 En vivo: https://portafolio-cristian-lime.vercel.app**
+
 Tiene dos formas de recorrerlo:
 
 - **La biblioteca de Nigi** (3D): un robot bibliotecario que, cuando le pides algo, sube por la escalera, trae el libro y te lo lee en voz alta.

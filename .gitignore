@@ -49,3 +49,4 @@ next-env.d.ts
 /.agents/
 /scripts/voice/muestra-voz-nigi.mp3
 /scripts/voice/tmp.wav
+/LINKEDIN.md
