@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portafolio · Cristian Velasco
 
-## Getting Started
+Portafolio de **Cristian Javier Velasco Burbano**, desarrollador full-stack.
 
-First, run the development server:
+Tiene dos formas de recorrerlo:
+
+- **La biblioteca de Nigi** (3D): un robot bibliotecario que, cuando le pides algo, sube por la escalera, trae el libro y te lo lee en voz alta.
+- **Modo lectura**: el portafolio clásico con todas las secciones.
+
+## Secciones
+
+Inicio · Sobre mí · Proyectos · Testimonios · Experiencia · Visitas empresariales · Contacto · Certificados e idiomas
+
+## Tecnologías
+
+- **Next.js 16** (App Router) · **React 19** · **TypeScript**
+- **Tailwind CSS v4** · **motion** (animaciones)
+- **three.js** · **React Three Fiber** · **drei** · postprocesado (la biblioteca 3D)
+- **Web Audio**: voz de Nigi pregenerada con VoiceStudio (`public/voice/`), con la voz del navegador como respaldo
+- **Formspree**: formulario de contacto
+- Despliegue en **Vercel**
+
+## Desarrollo
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Regenerar la voz de Nigi
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Si cambias textos en `lib/chapters.ts` o `lib/intents.ts`, con VoiceStudio abierto en `http://127.0.0.1:3900`:
 
-## Learn More
+```bash
+npx tsx scripts/voice-lines.ts > scripts/voice/lines.json
+python scripts/voice/generate.py
+```
 
-To learn more about Next.js, take a look at the following resources:
+Solo se generan los audios que falten.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estructura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Carpeta | Contenido |
+|---|---|
+| `data/portfolio.ts` | Todos los datos: perfil, proyectos, testimonios, experiencia, visitas, certificados |
+| `components/` | Secciones del portafolio clásico y efectos (`fx/`) |
+| `components/library3d/` | Escena 3D, robot Nigi y su coreografía |
+| `components/library/` | Interfaz de la biblioteca y lector de libros |
+| `lib/` | Capítulos de los libros, intención de las preguntas, voz |
+| `scripts/voice/` | Generación de los audios de Nigi |
